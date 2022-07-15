@@ -1,7 +1,6 @@
-.desktop {
-  width:500px;
-  height:500px;
-  border: 1px solid black;
+.playDesk {
+  float:left;
+  border: 1px solid grey;
 }
 
 .board {
@@ -41,4 +40,109 @@
   width:30px;
   height:30px;
   border: 1px solid grey;
+}
+
+.codeDesk {
+  float:left;
+  width: 700px;
+  height: 700px;
+  margin: 5px;
+  border: 1px solid grey;
+}
+
+.codeInstrumentBar {
+  float: right;
+  width: 90px;
+  height: 100%;
+  border-left: 1px solid grey;
+  margin: 0px;
+}
+
+.codeInstrument {
+  float:left;
+  width: 80px;
+  height: 30px;
+  border: 1px solid grey;
+  margin: 4px;
+  text-align: center;
+}
+
+.dustbin {
+  float: left;
+  width: 80px;
+  height: 50px;
+  border: 1px solid grey;
+  margin: 5px;
+  text-align: center;
+}
+
+.procedures {
+  float: left;
+  width: 600px;
+  height: 100%;
+}
+
+.procedure {
+  display: block;
+  flex-direction: column;
+  min-width: 30px;
+  margin: 5px 0px 5px 0px;
+  border: 1px solid grey;
+}
+
+.loopBlock {
+  display: block;
+  flex-direction: column;
+  min-width: 30px;
+  margin: 5px 0px 5px 0px;
+  border: 1px solid grey;
+}
+
+.ifBlock {
+  display: block;
+  flex-direction: column;
+  min-width: 30px;
+  margin: 5px 0px 5px 0px;
+  border: 1px solid grey;
+}
+
+.codeBlock {
+  display: flex;
+  flex-direction: column;
+  min-width: 30px;
+  margin: 5px 0px 5px 20px;
+  border: 1px solid grey;
+}
+
+.codeBlockTitle {
+  width: 200px;
+  margin: 0px 0px 0px 0px;
+  border: 1px solid grey;
+}
+
+.callCode {
+  width: 200px;
+  height: 30px;
+  margin: 5px 0px 0px 20px;
+  border: 1px solid grey;
+}
+
+.command {
+  width: 200px;
+  height: 30px;
+  margin: 5px 0px 5px 0px;
+  border: 1px solid grey;
+}
+
+.insertArea {
+  width: 200px;
+  height: 30px;
+  margin: -15px 0px -15px 20px;
+  border: 1px dotted lightgrey;
+}
+
+.condition {
+  display: inline-block;
+  padding:3px;
+  margin:3px;
 }

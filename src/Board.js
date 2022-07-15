@@ -2,84 +2,87 @@ import CrossWall from './CrossWall.js'
 import HorizontalWall from './HorizontalWall.js'
 import VerticalWall from './VerticalWall.js'
 import Square from './Square.js'
-import { useReducer, useEffect, useState } from 'react';
+import { useReducer, useEffect, useRef} from 'react';
 
 const TURN_SPEED = 1000; //ms in turn
 const TURN_DELAY = 500; //ms between turns
 const TURN_TICKS = 20; //ticks in turn (smoothness)
 const TURN_DELAY_TICKS = TURN_DELAY*TURN_TICKS/TURN_SPEED; //ticks between turns
+const TICK_TIME = TURN_SPEED/TURN_TICKS; //ms in tick
+
 
 function gameReducer(state, action) {
   switch (action.type) {
-    case "drop":
+    case "reset":
+      return gameInit({field: action.field, log: action.log});
 
     case "tick":
-      if (state.tick < TURN_TICKS+TURN_DELAY_TICKS) {
-        return {
-          ...state, 
-          tick: state.tick+1
-        };
-      } else {
-        if (state.step < state.gameLog.length) {
-          let nextStep = state.step+1;
-          return {
-            ...state, 
-            x: state.gameLog[nextStep].x,
-            y: state.gameLog[nextStep].y,
-            cond: `${state.gameLog[nextStep].cond}${(state.gameLog[nextStep].error&&"_error")}`,
-            step: state.step+1, 
-            tick: 0
-          };
-        }
+      let newTick = state.tick+1;
+      let newStep = state.step;
+      let newPlay = !((newStep >= state.log.length - 1)&&(newTick>=TURN_TICKS));
+      let newPaints = [...state.paints];
+      if (state.log[newStep].action === "paint") {
+        newPaints.push({x: state.log[newStep].x, y: state.log[newStep].y});
+      }
+      if ((newTick >= TURN_TICKS+TURN_DELAY_TICKS) && newPlay) {
+        newTick = 0;
+        newStep = state.step+1;
+      }  
+      let newBehavour = state.log[newStep].action;
+      let newError = state.log[newStep].error;
+      if (state.tick >= TURN_TICKS) {
+        newBehavour = (newError)?(state.behavour):"sleep";
+      } 
+      return {
+        paints: newPaints, 
+        log: [...state.log], 
+        step: newStep, 
+        tick: newTick,
+        behavour: newBehavour,
+        play: newPlay,
+        error: newError
       }
 
+    case "play":
+      return {...state, play: true}
+
+    case "replay":
+      return {...gameInit({field: action.field, log: action.log}), play: true}
+
+    case "pause":
+      return {...state, play: false}
+  }
+}
+
+function gameInit({field, log}) {
+  return {
+    paints: [...field.paints], 
+    log: [...log], 
+    step: 0,
+    tick: -1,
+    behavour: "sleep", 
+    play: false,
+    error: false
   }
 }
 
 
-function gameInit() {
+function Board({width, height, field, log}) {
 
-}
-
-
-function Board({width, height, field, log, gameInProgress, gameOver}) {
-
-  const [game, dispatchGame] = useReducer(gameReducer, {x: field.start.x, y: field.start.y, cond: "sleep", paints: [...field.paints], gameLog:[...log], step:0, tick:0 });
+  const [game, dispatchGame] = useReducer(gameReducer, {field, log}, gameInit);
   const tickerRef = useRef(0);
 
   useEffect(() => {
-    if (gameInProgress === 0) {
-
-    }
-    if (gameInProgress === 1) {
-
-    }
-  }, [gameInProgress]);
-
-  useEffect(() => {
-    if (gameInProgress === 1) {
-      makeMove();
-    }
-  }, [tick]);
-
-  useEffect(() => {
-    if (gameInProgress === 1) {
-      setRobot({x: log[step].x, y: log[step].y, cond: `${log[step].cond}${(log[step].error&&"_error")}`});
-      setTick(0); 
-    }
-  }, [step]);
-
-  function makeMove() {
-    if (tick < TURN_SMOOTHNESS) {
-      setTimeout(()=>setTick(tick + 1), TURN_SPEED/TURN_SMOOTHNESS);
-    } else {
-      if (step === log.length-1) {
-        gameOver();
-      } else {
-        setTimeout(()=>setStep(step+1), TURN_DELAY);
+    if (game.play) {
+      dispatchGame({type: 'tick'});
+      tickerRef.current = setInterval(() => dispatchGame({type: 'tick'}), TICK_TIME);
+      return () => {
+        clearInterval(tickerRef.current);
+        tickerRef.current = 0;
       }
     }
-  }
+  }, [game.play, field, log]);
+
 
   function isWall(type, x, y) {
     if (type==="h") return field.hWalls.some(cords => ((cords.x===x) && (cords.y===y)));
@@ -94,8 +97,8 @@ function Board({width, height, field, log, gameInProgress, gameOver}) {
   function renderWallRow(rowNum) {
     let result = [];
     for (let i=0; i<=width; i++) {
-      result.push(<CrossWall key={`cw_${i}_${rowNum}`} x={i} y={rowNum} isWall={() => isWall("c", i, rowNum)} />);
-      if (i!==width) result.push(<HorizontalWall key={`hw_${i}_${rowNum}`} x={i} y={rowNum} isWall={() => isWall("h", i, rowNum)} />);
+      result.push(<CrossWall key={`cw_${i}_${rowNum}`} x={i} y={rowNum} isWall={isWall("c", i, rowNum)} />);
+      if (i!==width) result.push(<HorizontalWall key={`hw_${i}_${rowNum}`} x={i} y={rowNum} isWall={isWall("h", i, rowNum)} />);
     }
     return (<div key={`wr_${rowNum}`} className="boardRow">{result}</div>);
   }
@@ -103,8 +106,8 @@ function Board({width, height, field, log, gameInProgress, gameOver}) {
   function renderSquareRow(rowNum) {
     let result = [];
     for (let i=0; i<=width; i++) {
-      result.push(<VerticalWall key={`vw_${i}_${rowNum}`} x={i} y={rowNum} isWall={() => isWall("v", i, rowNum)} />);
-      if (i!==width) result.push(<Square key={`sq_${i}_${rowNum}`} x={i} y={rowNum} paints={paints} robot={robot} />);
+      result.push(<VerticalWall key={`vw_${i}_${rowNum}`} x={i} y={rowNum} isWall={isWall("v", i, rowNum)} />);
+      if (i!==width) result.push(<Square key={`sq_${i}_${rowNum}`} x={i} y={rowNum} game={game} field={field} />);
     }
     return (<div key={`sr_${rowNum}`} className="boardRow">{result}</div>);
   }
@@ -116,7 +119,15 @@ function Board({width, height, field, log, gameInProgress, gameOver}) {
   }
   boardLiver.push(renderWallRow(height));
 
-  return (<div className="board">{boardLiver}</div>);
+  return (
+    <div className="playDesk">
+      <div className="board">{boardLiver}</div>
+      <div>tick: {game.tick}, step: {game.step}</div>
+      <button onClick={() => dispatchGame({type: "play"})}>Play</button>
+      <button onClick={() => dispatchGame({type: "pause"})}>Pause</button>
+      <button onClick={() => dispatchGame({type: "reset", field: field, log: log})}>Stop</button>
+      <button onClick={() => dispatchGame({type: "replay", field: field, log: log})}>Replay</button>
+    </div>);
 }
 
 export default Board;

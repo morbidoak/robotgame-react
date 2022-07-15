@@ -3,46 +3,51 @@ function executeRoboProgram (procedures, field, stepLimit) {
     // let field = {"start":{x:0,y:0}, "hWalls":[], "vWalls":[], "paints":[]};
 
   function condition(cond) {
-      if (cond==="north") {
+
+      if (cond.val ==="empty") {
+        return true;
+      }
+
+      if (cond.val==="north") {
           if (field.hWalls.some(cords => ((cords.x===currentPosition.x) && (cords.y===currentPosition.y))))
               return false;
           else 
               return true;
       }
-      if (cond==="south") {
+      if (cond.val==="south") {
           if (field.hWalls.some(cords => ((cords.x===currentPosition.x) && (cords.y===currentPosition.y+1))))
               return false;
           else
               return true;
       }
-      if (cond==="west") {
+      if (cond.val==="west") {
           if (field.vWalls.some(cords => ((cords.x===currentPosition.x) && (cords.y===currentPosition.y))))
               return false;
           else
               return true;
       }
-      if (cond==="east") {
+      if (cond.val==="east") {
           if (field.vWalls.some(cords => ((cords.x===currentPosition.x+1) && (cords.y===currentPosition.y))))
               return false;
           else
               return true;
       }
 
-      if (cond==="paint") {
+      if (cond.val==="paint") {
           if (currentPaints.some(cords => ((cords.x===currentPosition.x) && (cords.y===currentPosition.y))))
               return false;
           else 
               return true;
       }
 
-      if (cond.op==="and") 
-          return condition(cond.left) && condition(cond.right);
+    if (cond.val==="and") 
+        return condition(cond.left) && condition(cond.right);
 
-      if (cond.op==="or") 
-          return condition(cond.left) || condition(cond.right);
+    if (cond.val==="or") 
+        return condition(cond.left) || condition(cond.right);
       
-      if (cond.op==="not") 
-          return !condition(cond.right);
+     if (cond.val==="not") 
+        return !condition(cond.right);
       
       return false;
   }
@@ -56,9 +61,9 @@ function executeRoboProgram (procedures, field, stepLimit) {
 
   function move(to) {
     if (to === "paint") {
-        if (!condition("paint")) currentPaints.append({x:currentPosition.x, y:currentPosition.y});
+        if (!condition({val:"paint"})) currentPaints.append({x:currentPosition.x, y:currentPosition.y});
     } else {
-        if (!condition(to)) error=true;
+        if (!condition({val: to})) error=true;
         else {
             switch (to) {
                 case "north": currentPosition.y -= 1; break;
@@ -70,7 +75,6 @@ function executeRoboProgram (procedures, field, stepLimit) {
         }
     }
     workflow[step] = {"action":to, "x":currentPosition.x, "y":currentPosition.y, "error":isError()};
-    console.log(workflow[step]);
   }
 
   function execute(code) {
