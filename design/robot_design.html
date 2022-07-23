@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    @font-face { 
+      font-family: 'Akrobat'; 
+      src: url('fonts/Akrobat-SemiBold.otf'); 
+    }
+    
+    html, body {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .centroid {
+      float: none;
+      margin: 0px auto;
+      width: 1000px;
+    }
+
+    .header {
+      position: fixed;
+      width: 1000px;
+      height: 50px;
+      background-color: darkgoldenrod;
+    }
+
+    .program {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      float: right;
+      width: 340px;
+      margin: 60px 180px 30px 0px;
+      padding: 0px;
+    }
+
+    .procedure {
+      float: none;
+      width: 336px;
+      margin: 0px 0px 10px 0px;
+      padding: 0px;
+    }
+
+    .procedure-header {
+      float: left;
+      width: 316px;
+      height: 40px;
+      margin: 0px;
+      padding: 0px 10px 0px 10px;
+      border: 2px solid black;
+      border-radius: 15px 15px 0px 0px;
+      background-color: blanchedalmond;
+    }
+
+    .procedure-header span {
+      display: block;
+      float: left;
+      font: 16px Akrobat;
+      margin: 10px 0px 0px 5px;
+    }
+
+    .procedure-header button {
+      display: block;
+      float: left;
+      margin: 7px 0px 0px 0px; 
+      width: 25px;
+      height: 25px;
+      border: 2px solid black;
+      border-radius: 5px;
+      box-shadow: inset rgba(255,255,255,0.2) 2px  2px 4px 1px,
+                  inset rgba(0,0,0,0.2)      -2px -2px 4px 1px;
+    }
+
+    .procedure-header .rename {
+      background: rgb(255, 187, 139) url(images/rename.png) center no-repeat;
+      background-size: auto 16px;
+    }
+
+    .procedure-header .delete {
+      float: right;
+      background: rgb(255, 98, 98) url(images/delete.png) center no-repeat;
+      background-size: auto 18px;
+    }
+
+    .procedure-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      float: left;
+      width: 326px;
+      min-height: 35px;
+      margin: 0px;
+      padding: 5px 5px 10px 5px; 
+      border: 2px solid black;
+      border-top: none;
+      border-radius: 0px 0px 15px 15px;
+      background-color:rgb(230, 230, 230);
+      overflow: hidden;
+    }
+
+    .procedure-add {
+      display: block;
+      border: 2px solid black;
+      border-radius: 5px;
+      width: 150px;
+      height: 25px;
+      margin: 0px 0px 300px 0px;
+      font: 16px Akrobat;
+      background-color: rgb(255, 187, 139);
+      box-shadow: inset rgba(255,255,255,0.2) 2px  2px 4px 1px,
+                  inset rgba(0,0,0,0.2)      -2px -2px 4px 1px;
+    }
+
+    .instruments {
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      top: 60px;
+      right: 50%;
+      margin: 0px -500px 0px 0px;
+      width: 170px;
+      height: 700px;
+      background-color:rgb(230, 230, 230);
+      border-radius: 20px;
+    }
+
+    .simple-command {
+      cursor: grab;
+      float: none;
+      width: 160px;
+      height: 10px;
+      border: 2px solid black;
+      border-radius: 15px;
+      text-align: center;
+      line-height: 14px;
+      margin: 10px 0px 0px 0px;
+      padding: 5px 0px 11px 0px;
+      font: 14px Akrobat;
+      background-color: rgb(210, 233, 255);
+      box-shadow: inset rgba(255,255,255,0.2) 8px  8px 18px 5px,
+                  inset rgba(0,0,0,0.3)      -8px -8px 18px 5px;
+    }
+
+    .placement {
+      border: 2px dotted black;
+      background-color: rgba(210, 233, 255, 0.1);
+      box-shadow: none;
+    }
+
+    .simple-condition {
+      cursor: grab;
+      float: none;
+      width: 160px;
+      height: 10px;
+      border: 2px solid black;
+      border-radius: 15px;
+      text-align: center;
+      line-height: 14px;
+      margin: 10px 0px 0px 0px;
+      padding: 5px 0px 11px 0px;
+      font: 14px Akrobat;
+      background-color: rgb(197, 255, 205);
+      box-shadow: inset rgba(255,255,255,0.2) 8px  8px 18px 5px,
+                  inset rgba(0,0,0,0.3)      -8px -8px 18px 5px;
+    }
+
+    .instruments .simple-command, .instruments .simple-condition {
+      margin: 5px 0px 0px 0px;
+    }
+
+    .instruments .container {
+      background-color: rgb(255, 245, 159);
+    }
+
+    .instruments .operator {
+      background-color: rgb(182, 255, 249);
+    }
+
+    .instruments .spacer {
+      float: none;
+      width: 160px;
+      height: 10px;
+      background-color: transparent;
+    }
+
+    .instruments .dustbin {
+      float: none;
+      width: 80px;
+      height: 80px;
+      margin: 5px 0px 0px 0px;
+      box-shadow: inset rgba(255,255,255,0.2) 8px  8px 10px 5px,
+                  inset rgba(0,0,0,0.2)      -8px -8px 10px 5px;
+
+      background: rgb(255, 98, 98) url(images/dustbin.png) center no-repeat;
+      background-size: auto 60px;
+      border: 2px solid black;
+      border-radius: 40px;
+    }
+
+    .block-command {
+      float: none;
+      display: block;
+      margin: 10px 0px 0px 0px;
+      padding: 0px;
+    }
+
+    .condition-block {
+      cursor: grab;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0px;
+      padding: 0px 5px 10px 5px;
+      border: 2px solid black;
+      border-radius: 15px 15px 0px 0px;
+      background-color: rgb(219, 212, 148);
+    }
+
+    .condition-block span {
+      align-self: flex-start;
+      text-align: left;
+      font: 16px Akrobat;
+      margin: 5px 0px 0px 5px;
+    }
+
+    .command-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 35px;
+      margin: 0px;
+      padding: 0px 10px 10px 10px; 
+      border: 2px solid black;
+      border-top: none;
+      border-radius: 0px 0px 15px 15px;
+      background-color:rgb(230, 230, 230);
+      overflow: hidden;
+    }
+
+    .complex-condition {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px 0px 0px 0px;
+      padding: 0px 10px 10px 10px; 
+      border: 2px solid black;
+      border-radius: 15px;
+      background-color:rgb(193, 217, 223);
+      overflow: hidden;
+    }
+
+    .complex-condition span {
+      align-self: center;
+      text-align: center;
+      font: 16px Akrobat;
+      margin: 10px 0px 0px 0px;
+    }
+
+    .control-pannel {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      width: 450px;
+      height: 40px;
+      margin: 0px 0px 0px -500px;
+      padding: 0px 10px 0px 10px;
+      border: 2px solid black;
+      border-radius: 15px 15px 0px 0px;
+      background-color: rgb(233, 233, 255);
+    }
+
+    .board {
+      position: fixed;
+      top: 104px;
+      left: 50%;
+      width: 470px;
+      height: 645px;
+      margin: 0px 0px 0px -500px;
+      background-color: rgb(230, 230, 230);
+      border: 2px solid black;
+      border-top: none;
+      border-radius: 0px 0px 15px 15px;
+    }
+
+    .board-inside {
+      position: relative;
+      float: left;
+      width: 450px;
+      height: 600px;
+      margin: 10px;
+      background-color: transparent;
+    }
+
+    .h-wall {
+      position: relative;
+      float: left;
+      width: 34px;
+      height: 10px;
+      z-index: 10;
+      background-color: rgba(196, 196, 196, 0.01);
+    }
+
+    .x-wall {
+      position: relative;
+      float: left;
+      width: 14px;
+      height: 14px;
+      margin: -2px;
+      z-index: 15;
+      border-radius: 7px;
+      background-color: rgba(196, 196, 196, 0.01);
+    }
+
+    .v-wall {
+      position: relative;
+      float: left;
+      width: 10px;
+      height: 34px;
+      z-index: 10;
+      background-color: rgba(196, 196, 196, 0.01);
+    }
+
+    .occupied {
+      background-color: rgb(170, 170, 170);
+      box-shadow: rgba(0,0,0,0.3)      1px 2px 4px 1px,
+                  inset rgba(255,255,255,0.2) 1px  2px 4px 1px,
+                  inset rgba(0,0,0,0.2)      1px -2px 4px 1px;
+    }
+
+    .square {
+      position: relative;
+      float: left;
+      width: 42px;
+      height: 42px;
+      margin: -5px;
+      z-index: 5;
+      background-color: rgb(255, 255, 255);
+      border: 1px dotted rgb(90, 90, 90);
+    }
+    
+  </style>
+</head>
+
+<body>
+  <div class="centroid">
+    <div class="header">
+    
+    </div>
+
+    <div class="control-pannel">
+    </div>
+
+    <div class="board">
+      <div class="board-inside">
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall occupied"></div><div class="h-wall occupied"></div>
+        <div class="x-wall occupied"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall occupied"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall occupied"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>  
+        
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div><div class="square"></div>
+        <div class="v-wall"></div>
+
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div><div class="h-wall"></div>
+        <div class="x-wall"></div>
+      </div>
+    </div>
+
+    <div class="instruments">
+      <div class="simple-command">шаг на север</div>
+      <div class="simple-command">шаг на юг</div>
+      <div class="simple-command">шаг на запад</div>
+      <div class="simple-command">шаг на восток</div>
+      <div class="simple-command">закрасить</div>
+      <div class="simple-command">вызов процедуры</div>
+      <div class="spacer"></div>
+      <div class="simple-command container">Если ...</div>
+      <div class="simple-command container">Цикл</div>
+      <div class="spacer"></div>
+      <div class="simple-condition">на севере свободно</div>
+      <div class="simple-condition">на юге свободно</div>
+      <div class="simple-condition">на западе свободно</div>
+      <div class="simple-condition">на востоке свободно</div>
+      <div class="simple-condition">закрашено</div>
+      <div class="spacer"></div>
+      <div class="simple-condition operator">... И ...</div>
+      <div class="simple-condition operator">... ИЛИ ...</div>
+      <div class="simple-condition operator">НЕ ...</div>
+      <div class="spacer"></div>
+      <div class="dustbin"></div>
+    </div>
+
+    <div class="program">
+      <div class="procedure">
+        <div class="procedure-header">
+          <button class="rename"></button>
+          <span>Программа 1</span>
+        </div>
+        <div class="procedure-body">
+          <div class="simple-command">шаг на север</div>
+          <div class="simple-command">шаг на юг</div>
+          <div class="simple-command placement"></div>
+          <div class="block-command">
+            <div class="condition-block">
+              <span>Если</span>
+              <div class="complex-condition">
+                <div class="simple-condition">на севере свободно</div>
+                <span>И</span>
+                <div class="simple-condition">на западе свободно</div>
+              </div>
+              <span>выполнить:</span>
+            </div>
+            <div class="command-block">
+              <div class="simple-command">шаг на север</div>
+              <div class="block-command">
+                <div class="condition-block">
+                  <span>Пока</span>
+                  <div class="simple-condition">на севере свободно</div>
+                  <span>выполнять:</span>
+                </div>
+                <div class="command-block">
+                  <div class="simple-command">шаг на север</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="simple-command">шаг на восток</div>
+        </div>
+      </div>
+      <div class="procedure">
+        <div class="procedure-header">
+          <button class="rename"></button>
+          <span>Процедура 1</span>
+          <button class="delete"></button>
+        </div>
+        <div class="procedure-body">
+          <div class="block-command">
+            <div class="condition-block">
+              <span>Пока</span>
+              <div class="simple-condition">на юге свободно</div>
+              <span>выполнять:</span>
+            </div>
+            <div class="command-block">
+              <div class="simple-command">шаг на юг</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="procedure">
+        <div class="procedure-header">
+          <button class="rename"></button>
+          <span>Процедура 2</span>
+          <button class="delete"></button>
+        </div>
+        <div class="procedure-body">
+          <div class="block-command">
+            <div class="condition-block">
+              <span>Пока</span>
+              <div class="simple-condition">на западе свободно</div>
+              <span>выполнять:</span>
+            </div>
+            <div class="command-block">
+              <div class="simple-command">шаг на запад</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="procedure-add">Новая процедура</button>
+    </div>
+
+  </div>
+</body>
+</html>

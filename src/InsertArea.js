@@ -1,7 +1,12 @@
-import {useDrop} from 'react-dnd';
-import {useEffect} from 'react';
+import { useDrop } from 'react-dnd';
+import { connect } from 'react-redux';
+import { dropCommand } from './RoboProgramStore/actions';
 
-function InsertArea({dropCmd}) {
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  dropCmd: () => dispatch(dropCommand(ownProps.code.id))
+});
+
+const InsertArea = connect(null, mapDispatchToProps)(({code, dropCmd}) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ["MOVE COMMAND", "NEW COMMAND"],
     drop: () => dropCmd(),
@@ -11,6 +16,6 @@ function InsertArea({dropCmd}) {
   }));
 
   return (<div ref={drop} className="insertArea">{(isOver&&"-------------------")}</div>);
-}
+});
 
 export default InsertArea;

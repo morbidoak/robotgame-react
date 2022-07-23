@@ -2,8 +2,13 @@ import CrossWall from './CrossWall.js'
 import HorizontalWall from './HorizontalWall.js'
 import VerticalWall from './VerticalWall.js'
 import Square from './Square.js'
+import { connect } from 'react-redux';
 import { useReducer, useEffect, useRef} from 'react';
+import executeRoboProgram from './RoboProgram';
 
+const BOARD_WIDTH = 10;
+const BOARD_HEIGHT = 10;
+const TURNS_LIMIT = 100; //maximum turns in log
 const TURN_SPEED = 1000; //ms in turn
 const TURN_DELAY = 500; //ms between turns
 const TURN_TICKS = 20; //ticks in turn (smoothness)
@@ -67,7 +72,14 @@ function gameInit({field, log}) {
 }
 
 
-function Board({width, height, field, log}) {
+const mapStateToProps = (state) => ({
+  field: state.field,
+  log: executeRoboProgram(state.program.procedures, state.field, TURNS_LIMIT),
+});
+
+const Board = connect(mapStateToProps, null)(({field, log}) => {
+  const width = BOARD_WIDTH;
+  const height = BOARD_HEIGHT;
 
   const [game, dispatchGame] = useReducer(gameReducer, {field, log}, gameInit);
   const tickerRef = useRef(0);
@@ -97,8 +109,8 @@ function Board({width, height, field, log}) {
   function renderWallRow(rowNum) {
     let result = [];
     for (let i=0; i<=width; i++) {
-      result.push(<CrossWall key={`cw_${i}_${rowNum}`} x={i} y={rowNum} isWall={isWall("c", i, rowNum)} />);
-      if (i!==width) result.push(<HorizontalWall key={`hw_${i}_${rowNum}`} x={i} y={rowNum} isWall={isWall("h", i, rowNum)} />);
+      result.push(<CrossWall key={`cw_${i}_${rowNum}`} x={i} y={rowNum} />);
+      if (i!==width) result.push(<HorizontalWall key={`hw_${i}_${rowNum}`} x={i} y={rowNum} />);
     }
     return (<div key={`wr_${rowNum}`} className="boardRow">{result}</div>);
   }
@@ -106,7 +118,7 @@ function Board({width, height, field, log}) {
   function renderSquareRow(rowNum) {
     let result = [];
     for (let i=0; i<=width; i++) {
-      result.push(<VerticalWall key={`vw_${i}_${rowNum}`} x={i} y={rowNum} isWall={isWall("v", i, rowNum)} />);
+      result.push(<VerticalWall key={`vw_${i}_${rowNum}`} x={i} y={rowNum} />);
       if (i!==width) result.push(<Square key={`sq_${i}_${rowNum}`} x={i} y={rowNum} game={game} field={field} />);
     }
     return (<div key={`sr_${rowNum}`} className="boardRow">{result}</div>);
@@ -128,6 +140,6 @@ function Board({width, height, field, log}) {
       <button onClick={() => dispatchGame({type: "reset", field: field, log: log})}>Stop</button>
       <button onClick={() => dispatchGame({type: "replay", field: field, log: log})}>Replay</button>
     </div>);
-}
+});
 
 export default Board;

@@ -1,5 +1,5 @@
 function executeRoboProgram (procedures, field, stepLimit) {
-    // let procedures = {"_":[]};
+    // let procedures = [{id:"werw", title:"wer", code:[]}, {id:"ert", title:"fgb", code:[]}];
     // let field = {"start":{x:0,y:0}, "hWalls":[], "vWalls":[], "paints":[]};
 
   function condition(cond) {
@@ -84,7 +84,12 @@ function executeRoboProgram (procedures, field, stepLimit) {
         if (code[i].type === "move") move(code[i].to);
         if (code[i].type === "if") if (condition(code[i].cond)) execute(code[i].code);
         if (code[i].type === "loop") loop(code[i].cond, code[i].code);
-        if (code[i].type === "call") execute(procedures[code[i].src]);
+        if (code[i].type === "call") {
+            if (code[i].src !== "") {
+                let callIndex = procedures.findIndex(({ id }) => ( id === code[i].src ));
+                if (callIndex>=0) execute(procedures[callIndex].code);
+            }
+        }
 
         step += 1;
     }
@@ -98,7 +103,7 @@ function executeRoboProgram (procedures, field, stepLimit) {
   let step = 0;
   let workflow = [];
   
-  execute(procedures["_"]);
+  execute(procedures[0].code);
 
   return workflow;
 }

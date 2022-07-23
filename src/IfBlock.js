@@ -1,12 +1,19 @@
 import CodeBlock from "./CodeBlock";
 import Condition from "./Condition";
-import {useDrag} from 'react-dnd';
-import {useEffect} from 'react';
+import { useDrag } from 'react-dnd';
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { moveCommand, releaseCommand } from './RoboProgramStore/actions';
 
-function IfBlock({code, dispatchCode}) {
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  dragStart: () => dispatch(moveCommand(ownProps.code)),
+  dragAbort: () => dispatch(releaseCommand()),
+});
+
+const IfBlock = connect(null, mapDispatchToProps)(({code, dragStart, dragAbort}) => {
   const [{ isDragging }, drag] = useDrag({
     type: 'MOVE COMMAND',
-    end: () => dispatchCode({type: "cmdAbort"}),
+    end: () => dragAbort(),
     collect: (monitor) => ({
         isDragging: monitor.isDragging(),
     }),
@@ -14,7 +21,7 @@ function IfBlock({code, dispatchCode}) {
 
   useEffect(() => {
     if (isDragging) {
-      dispatchCode({type: "cmdMoveBegin", dragCode: code, dragId:code.id});
+      dragStart();
     }
   }, [isDragging]);
 
@@ -22,12 +29,12 @@ function IfBlock({code, dispatchCode}) {
     <div className="ifBlock">
       <div ref={drag} className="ifTitle">
         IF
-        <Condition code={code.cond} dispatchCode={dispatchCode} />
+        <Condition code={code.cond} />
       </div>
-      <CodeBlock code={code.code} dispatchCode={dispatchCode} />
+      <CodeBlock code={code.code} />
     </div>
   );
 
-}
+});
 
 export default IfBlock;

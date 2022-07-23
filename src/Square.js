@@ -1,19 +1,44 @@
-import { useState, useEffect } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
+import { connect } from 'react-redux';
+import { moveRobot, addPaint, removePaint } from "./RoboProgramStore/actions";
 
-function isPaint(x, y, paints) {
-  return paints.some(cords => ((cords.x===x) && (cords.y===y)));
-}
+const mapStateToProps = (state, ownProps) => ({
+  isPaint: (ownProps.game.tick > -1)?
+    (ownProps.game.paints.some(cords => ((cords.x===ownProps.x) && (cords.y===ownProps.y)))):
+    (state.field.paints.some(cords => ((cords.x===ownProps.x) && (cords.y===ownProps.y)))),
+  
+  isRobot: (ownProps.game.tick > -1)?
+    ((ownProps.x===ownProps.game.log[ownProps.game.step].x) && (ownProps.y===ownProps.game.log[ownProps.game.step].y)):
+    ((ownProps.x===state.field.robot.x) && (ownProps.y===state.field.robot.y))
+});
 
-function isRobot(x, y, pos) {
-    return (x===pos.x) && (y===pos.y);
-}
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  addPaint: () => dispatch(addPaint(ownProps.x, ownProps.y)),
+  deletePaint: () => dispatch(removePaint(ownProps.x, ownProps.y)),
+  dropRobot: () => dispatch(moveRobot(ownProps.x, ownProps.y)),
+});
 
-function Square({x, y, game, field}) {
+const Square = connect(mapStateToProps, mapDispatchToProps)(({x, y, game, isPaint, isRobot, addPaint, deletePaint, dropRobot}) => {
+  const [{ isDragging }, drag] = useDrag({
+    type: "ROBOT",
+    collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+    }),
+  });
+
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: "ROBOT",
+    drop: () => dropRobot(),
+    collect: monitor => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+
   return (
-    <div className="square" style={{backgroundColor: isPaint(x, y, (game.tick > -1)?(game.paints):(field.paints))?"yellow":"white"}}>
-      {isRobot(x, y, (game.tick > -1)?(game.log[game.step]):(field.robot))&&<div>R</div>}
+    <div ref={drop} className="square" onClick={()=>(isPaint?deletePaint():addPaint())} style={{backgroundColor:isPaint?"yellow":"white"}}>
+      {isRobot&&(<div ref={drag}>R</div>)}
     </div>
   )
-}
+});
 
 export default Square;
