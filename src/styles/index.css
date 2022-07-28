@@ -1,0 +1,18 @@
+@font-face { 
+  font-family: 'Akrobat'; 
+  src: url('../fonts/Akrobat-SemiBold.otf'); 
+}
+
+html, body {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  cursor: pointer;
+}

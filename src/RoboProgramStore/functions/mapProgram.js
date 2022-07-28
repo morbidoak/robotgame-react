@@ -120,7 +120,20 @@ export function mapCode(code, func=null, params={}, level="program") {
     }
 
     case "condition": {
+      
+
       if (func==="INSERT_CONDITION" && code.id === params.dropId) {
+        if (params.condition.val === "not" && params.condition.right.val === "empty") {
+          let newCondition = mapCode(params.condition, null, {}, "condition");
+          newCondition.right = code;
+          return newCondition;
+        }
+        if ((params.condition.val === "and" || params.condition.val === "or") && params.condition.left.val === "empty") {
+          let newCondition = mapCode(params.condition, null, {}, "condition");
+          newCondition.left = code;
+          return newCondition;
+        }
+
         return params.condition;
       }
 
@@ -158,4 +171,10 @@ export function checkProcedureTitle(procedures, newTitle) {
   if (newTitle==="") return false;
   if (procedures.findIndex(({ title }) => (title === newTitle)) >= 0) return false;
   return true;
+}
+
+export function newProcedureTitle(procedures, baseTitle) {
+  let i = 1;
+  while (!checkProcedureTitle(procedures, `${baseTitle} ${i}`)) i++;
+  return `${baseTitle} ${i}`;
 }

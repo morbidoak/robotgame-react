@@ -1,0 +1,136 @@
+.control-pannel {
+  position: fixed;
+  top: 90px;
+  left: 50%;
+  width: 438px;
+  height: 40px;
+  margin: 0px 0px 0px -500px;
+  padding: 0px 17px 0px 15px;
+  border: 2px solid black;
+  border-radius: 15px 15px 0px 0px;
+  background-color: rgb(233, 233, 255);
+}
+
+.control-pannel span {
+  text-align: left;
+  font: 16px Akrobat;
+  line-height: 40px;
+}
+
+.control-pannel button {
+  display: block;
+  float: right;
+  margin: 5px 0px 0px 2px; 
+  width: 30px;
+  height: 30px;
+  border: 2px solid black;
+  border-radius: 5px;
+  box-shadow: inset rgba(255,255,255,0.2) 2px  2px 4px 1px,
+              inset rgba(0,0,0,0.2)      -2px -2px 4px 1px;
+}
+
+.control-pannel .play {
+  background: rgb(133, 248, 133) url(../images/play.png) center no-repeat;
+  background-size: auto 16px;
+}
+
+.control-pannel .pause {
+  background: rgb(253, 251, 127) url(../images/pause.png) center no-repeat;
+  background-size: auto 16px;
+}
+
+.control-pannel .stop {
+  background: rgb(255, 98, 98) url(../images/stop.png) center no-repeat;
+  background-size: auto 16px;
+}
+
+.board {
+  position: fixed;
+  top: 134px;
+  left: 50%;
+  width: 470px;
+  height: 645px;
+  margin: 0px 0px 0px -500px;
+  background-color: rgb(230, 230, 230);
+  border: 2px solid black;
+  border-top: none;
+  border-radius: 0px 0px 15px 15px;
+}
+
+.board-inside {
+  position: relative;
+  float: left;
+  width: 450px;
+  height: 600px;
+  margin: 10px;
+  background-color: transparent;
+}
+
+.wall {
+  position: relative;
+  float: left;
+  background-color: transparent;
+}
+
+.h-wall {
+  width: 34px;
+  height: 10px;
+}
+
+.x-wall {
+  width: 14px;
+  height: 14px;
+  margin: -2px;
+  border-radius: 2px;
+}
+
+.v-wall {
+  width: 10px;
+  height: 34px;
+}
+
+.occupied {
+  background-color: rgb(95, 72, 30);
+  box-shadow: rgba(0,0,0,0.3)      1px 2px 4px 1px,
+              inset rgba(255,255,255,0.2) 1px  2px 4px 1px,
+              inset rgba(0,0,0,0.2)      1px -2px 4px 1px;
+}
+
+.square {
+  position: relative;
+  float: left;
+  width: 42px;
+  height: 42px;
+  margin: -5px;
+  z-index: 5;
+  background-color: rgb(172, 114, 14);
+  border: 1px dotted rgb(243, 224, 185);
+}
+
+.painted {
+  background-color: rgb(235, 255, 55);
+}
+
+.robot {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  margin: -10px;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 60px 60px;
+}
+
+.robot-n { background-image: url(../images/robot-sprites/0.png); }
+.robot-nne { background-image: url(../images/robot-sprites/1.png); }
+.robot-nee { background-image: url(../images/robot-sprites/2.png); }
+.robot-e { background-image: url(../images/robot-sprites/3.png); }
+.robot-see { background-image: url(../images/robot-sprites/4.png); }
+.robot-sse { background-image: url(../images/robot-sprites/5.png); }
+.robot-s { background-image: url(../images/robot-sprites/6.png); }
+.robot-ssw { background-image: url(../images/robot-sprites/7.png); }
+.robot-sww { background-image: url(../images/robot-sprites/8.png); }
+.robot-w { background-image: url(../images/robot-sprites/9.png); }
+.robot-nww { background-image: url(../images/robot-sprites/10.png); }
+.robot-nnw { background-image: url(../images/robot-sprites/11.png); }

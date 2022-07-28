@@ -1,4 +1,4 @@
-import {addInserters, clearInserters, insertCommand, deleteCommand, mapCode, checkProcedureTitle} from '../functions/mapProgram';
+import {addInserters, clearInserters, insertCommand, deleteCommand, mapCode, checkProcedureTitle, newProcedureTitle} from '../functions/mapProgram';
 
 export default function program(state={}, action) {
   switch (action.type) {
@@ -53,21 +53,12 @@ export default function program(state={}, action) {
       }
 
     case "CONDITION_DROP": {
-      if (state.dragId === "") {
-        return {
-          procedures: mapCode(state.procedures, "INSERT_CONDITION", {condition: state.dragCode, dropId: action.dropId}),
-          dragCode: "",
-          dragId: "",
-          editing: false,
-        }
-      } else {
         return {
           procedures: mapCode(mapCode(state.procedures, "DELETE_CONDITION", {dropId: state.dragId}), "INSERT_CONDITION", {condition: state.dragCode, dropId: action.dropId}),
           dragCode: "",
           dragId: "",
           editing: false,
         }
-      }
     }
 
     case "CONDITION_TRASH":
@@ -87,14 +78,10 @@ export default function program(state={}, action) {
       }
 
     case "PROCEDURE_ADD": {
-      if (checkProcedureTitle(state.procedures, action.newTitle)) {
-        return {
-          ...state,
-          procedures: mapCode(state.procedures, "ADD_PROCEDURE", {newTitle: action.newTitle}),
-        }
-      } else {
-        return state;
-      } 
+      return {
+        ...state,
+        procedures: mapCode(state.procedures, "ADD_PROCEDURE", {newTitle: newProcedureTitle(state.procedures, action.baseTitle = "")}),
+      }
     }
 
     case "PROCEDURE_RENAME":
@@ -114,15 +101,11 @@ export default function program(state={}, action) {
       }
 
     case "PROCEDURE_DELETE":
-      if (checkProcedureTitle(state.procedures, action.newTitle)) {
-        return {
-          ...state,
-          procedures: mapCode(state.procedures, "DELETE_PROCEDURE", {deleteId: action.deleteId}),
-        }
-      } else {
-        return state;
-      } 
-    
+      return {
+        ...state,
+        procedures: mapCode(state.procedures, "DELETE_PROCEDURE", {deleteId: action.deleteId}),
+      }
+
     default:
       return state;
   }

@@ -1,0 +1,119 @@
+.instruments {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 90px;
+  right: 50%;
+  margin: 0px -500px 0px 0px;
+  width: 170px;
+  height: 700px;
+  background-color:rgb(230, 230, 230);
+  border-radius: 20px;
+}
+
+.simple-command {
+  cursor: grab;
+  float: none;
+  width: 160px;
+  height: 10px;
+  border: 2px solid black;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 14px;
+  margin: 10px 0px 0px 0px;
+  padding: 5px 0px 11px 0px;
+  font: 14px Akrobat;
+  background-color: rgb(210, 233, 255);
+  box-shadow: inset rgba(255,255,255,0.2) 8px  8px 18px 5px,
+              inset rgba(0,0,0,0.3)      -8px -8px 18px 5px;
+}
+
+.simple-command span {
+  display: block;
+  float: right;
+  margin: 0px 5px 0px 0px;
+}
+
+.simple-command select {
+  display: block;
+  float: right;
+  width: 100px;
+  margin: 1px 5px 0px 0px;
+  font: 12px Akrobat;
+  border: none;
+  background-color: transparent;
+}
+
+.simple-condition {
+  cursor: grab;
+  float: none;
+  width: 160px;
+  height: 10px;
+  border: 2px solid black;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 14px;
+  margin: 10px 0px 0px 0px;
+  padding: 5px 0px 11px 0px;
+  font: 14px Akrobat;
+  background-color: rgb(197, 255, 205);
+  box-shadow: inset rgba(255,255,255,0.2) 8px  8px 18px 5px,
+              inset rgba(0,0,0,0.3)      -8px -8px 18px 5px;
+}
+
+.instruments .simple-command, .instruments .simple-condition {
+  margin: 5px 0px 0px 0px;
+}
+
+.instruments .container {
+  background-color: rgb(255, 245, 159);
+}
+
+.instruments .operator {
+  background-color: rgb(182, 255, 249);
+}
+
+.instruments .spacer {
+  float: none;
+  width: 160px;
+  height: 10px;
+  background-color: transparent;
+}
+
+.instruments .dustbin {
+  float: none;
+  width: 80px;
+  height: 80px;
+  margin: 5px 0px 0px 0px;
+  box-shadow: inset rgba(255,255,255,0.2) 8px  8px 10px 5px,
+              inset rgba(0,0,0,0.2)      -8px -8px 10px 5px;
+
+  background: rgb(255, 98, 98) url(../images/dustbin.png) center no-repeat;
+  background-size: auto 60px;
+  border: 2px solid black;
+  border-radius: 40px;
+}
+
+.program {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  float: right;
+  width: 340px;
+  margin: 90px 180px 30px 0px;
+  padding: 0px;
+}
+
+.procedure-add {
+  display: block;
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 150px;
+  height: 25px;
+  margin: 0px 0px 300px 0px;
+  font: 16px Akrobat;
+  background-color: rgb(255, 187, 139);
+  box-shadow: inset rgba(255,255,255,0.2) 2px  2px 4px 1px,
+              inset rgba(0,0,0,0.2)      -2px -2px 4px 1px;
+}

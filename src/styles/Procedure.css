@@ -1,0 +1,152 @@
+
+    .procedure {
+      float: none;
+      width: 336px;
+      margin: 0px 0px 10px 0px;
+      padding: 0px;
+    }
+
+    .procedure-header {
+      float: left;
+      width: 316px;
+      height: 40px;
+      margin: 0px;
+      padding: 0px 10px 0px 10px;
+      border: 2px solid black;
+      border-radius: 15px 15px 0px 0px;
+      background-color: blanchedalmond;
+    }
+
+    .procedure-header span {
+      display: block;
+      float: left;
+      font: 16px Akrobat;
+      margin: 10px 0px 0px 5px;
+    }
+
+    .procedure-header button {
+      display: block;
+      float: left;
+      margin: 7px 0px 0px 0px; 
+      width: 25px;
+      height: 25px;
+      border: 2px solid black;
+      border-radius: 5px;
+      box-shadow: inset rgba(255,255,255,0.2) 2px  2px 4px 1px,
+                  inset rgba(0,0,0,0.2)      -2px -2px 4px 1px;
+    }
+
+    .procedure-header .rename {
+      background: rgb(255, 187, 139) url(../images/rename.png) center no-repeat;
+      background-size: auto 16px;
+    }
+
+    .procedure-header .delete {
+      float: right;
+      background: rgb(255, 98, 98) url(../images/delete.png) center no-repeat;
+      background-size: auto 18px;
+    }
+
+    .procedure-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      float: left;
+      width: 326px;
+      min-height: 35px;
+      margin: 0px;
+      padding: 5px 5px 10px 5px; 
+      border: 2px solid black;
+      border-top: none;
+      border-radius: 0px 0px 15px 15px;
+      background-color:rgb(230, 230, 230);
+      overflow: hidden;
+    }
+
+    .command-placement {
+      position: relative;
+      z-index: 5;
+      float: none;
+      width: 164px;
+      height: 30px;
+      padding: 18px 0px 10px 0px;
+      margin: -8px 0px -10px 0px;
+    }
+
+    .hidden {
+      height: 1px;
+      background-color: transparent;
+      box-shadow: none;
+      margin: -9px 0px -20px 0px;
+    }
+
+    .command-placement div {
+      width: 160px;
+      height: 26px;
+      border: 2px dotted black;
+      border-radius: 15px;
+      text-align: center;
+      line-height: 14px;
+      margin: 0px;
+      padding: 0px;
+      background-color: rgba(210, 233, 255, 0.1);
+    }
+
+    .block-command {
+      float: none;
+      display: block;
+      margin: 10px 0px 0px 0px;
+      padding: 0px;
+    }
+
+    .condition-block {
+      cursor: grab;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0px;
+      padding: 0px 5px 10px 5px;
+      border: 2px solid black;
+      border-radius: 15px 15px 0px 0px;
+      background-color: rgb(219, 212, 148);
+    }
+
+    .condition-block span {
+      align-self: flex-start;
+      text-align: left;
+      font: 16px Akrobat;
+      margin: 5px 0px 0px 5px;
+    }
+
+    .command-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 35px;
+      margin: 0px;
+      padding: 0px 10px 10px 10px; 
+      border: 2px solid black;
+      border-top: none;
+      border-radius: 0px 0px 15px 15px;
+      background-color:rgb(230, 230, 230);
+      overflow: hidden;
+    }
+
+    .complex-condition {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px 0px 0px 0px;
+      padding: 0px 10px 10px 10px; 
+      border: 2px solid black;
+      border-radius: 15px;
+      background-color:rgb(193, 217, 223);
+      overflow: hidden;
+    }
+
+    .complex-condition span {
+      align-self: center;
+      text-align: center;
+      font: 16px Akrobat;
+      margin: 10px 0px 0px 0px;
+    }
