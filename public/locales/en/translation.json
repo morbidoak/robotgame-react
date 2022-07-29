@@ -1,0 +1,56 @@
+{
+  "title": "Programming:<1>robot game</1>",
+  "menu": {
+    "new": "Create",
+    "save": "Save",
+    "load": "Load",
+    "lessons": "Lessons"
+  },
+  "instrument": {
+    "COMMAND": {
+      "north": "step north",
+      "south": "step south",
+      "east": "step east",
+      "west": "step west",
+      "paint": "paint",
+      "if": "If ... Then",
+      "loop": "While ... Do",
+      "if-p1": "If",
+      "if-p2": "Then:",
+      "loop-p1": "While",
+      "loop-p2": "Do:",
+      "call": "call procedure",
+      "call-p": "Call:"
+    },
+    "CONDITION": {
+      "north": "north open",
+      "south": "south open",
+      "east": "east open",
+      "west": "west open",
+      "paint": "painted",
+      "and": "... AND ...",
+      "or": "... OR ...",
+      "not": "NOT ...",
+      "and-p": "AND",
+      "or-p": "OR",
+      "not-p": "NOT",
+      "empty": "condition"     
+    },
+    "new-procedure": "New procedure",
+    "empty-procedure": "-"
+  },
+  "alerts": {
+    "delete-procedure": "Really delete procedure?",
+    "rename-procedure": "New title:",
+    "not-released": "Sorry, this section still under construction."
+  },
+  "status": {
+    "robot": "Robot",
+    "ready": "ready to work",
+    "atwork": "at work",
+    "pause": "paused",
+    "finish": "finished",
+    "broken": "broken",
+    "outside": "outside the field"
+  }
+}

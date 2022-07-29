@@ -60,6 +60,9 @@ function executeRoboProgram (procedures, field, stepLimit) {
   }
 
   function move(to) {
+    let newStep = {};
+    newStep.start = {x:currentPosition.x, y:currentPosition.y};
+    newStep.action = to;
     if (to === "paint") {
         if (!condition({val:"paint"})) currentPaints.append({x:currentPosition.x, y:currentPosition.y});
     } else {
@@ -74,7 +77,9 @@ function executeRoboProgram (procedures, field, stepLimit) {
             }
         }
     }
-    workflow[step] = {"action":to, "x":currentPosition.x, "y":currentPosition.y, "error":isError()};
+    newStep.end = {x:currentPosition.x, y:currentPosition.y};
+    newStep.error = isError();
+    workflow.push(newStep);
   }
 
   function execute(code) {

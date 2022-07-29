@@ -55,7 +55,7 @@
       width: 326px;
       min-height: 35px;
       margin: 0px;
-      padding: 5px 5px 10px 5px; 
+      padding: 5px 5px 20px 5px; 
       border: 2px solid black;
       border-top: none;
       border-radius: 0px 0px 15px 15px;
@@ -124,7 +124,7 @@
       align-items: center;
       min-height: 35px;
       margin: 0px;
-      padding: 0px 10px 10px 10px; 
+      padding: 0px 10px 20px 10px; 
       border: 2px solid black;
       border-top: none;
       border-radius: 0px 0px 15px 15px;

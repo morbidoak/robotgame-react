@@ -1,17 +1,48 @@
 import { useDrag } from 'react-dnd';
 import { connect } from 'react-redux';
+import { BOARD_OFFSET_X, BOARD_OFFSET_Y, BOARD_CELL_WIDTH, BOARD_CELL_HEIGHT, MOVE_LENGTH_WIDTH, MOVE_LENGTH_HEIGHT } from '../gameConfig.js';
 
-const BOARD_OFFSET_X = 8;
-const BOARD_OFFSET_Y = 8;
-const BOARD_CELL_WIDTH = 44;
-const BOARD_CELL_HEIGHT = 44;
+const mapStateToProps = (state, ownProps) => {
+  const tick = ownProps.game.tick;
+  const step = ownProps.game.step;
+  const workflow = ownProps.game.workflow;
+  const behavour = ownProps.game.behavour;
 
-const mapStateToProps = (state, ownProps) => ({
-  cordX:  (ownProps.game.tick > -1)?ownProps.game.log[ownProps.game.step].x:state.field.robot.x,
-  cordY:  (ownProps.game.tick > -1)?ownProps.game.log[ownProps.game.step].y:state.field.robot.y,
-});
+  let cordX = (tick > -1)?workflow[step].start.x:state.field.robot.x;
+  let cordY = (tick > -1)?workflow[step].start.y:state.field.robot.y;
 
-const Robot = connect(mapStateToProps, null)(({game, cordX, cordY}) => {
+  let top = BOARD_OFFSET_Y + BOARD_CELL_HEIGHT*cordY;
+  let left = BOARD_OFFSET_X + BOARD_CELL_WIDTH*cordX;
+  let direction = "s";
+
+  if (tick > -1) {
+    direction = behavour[tick];
+    
+    for (let i=1; i<=tick; i++) {
+      if (behavour[i] === behavour[i-1]) {
+        switch (behavour[tick]) {
+          case "n":
+            top -= MOVE_LENGTH_HEIGHT;
+            break;
+          case "s":
+            top += MOVE_LENGTH_HEIGHT;
+            break;
+          case "w":
+            left -= MOVE_LENGTH_WIDTH;
+            break;
+          case "e":
+            left += MOVE_LENGTH_WIDTH;
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+  return {cordX, cordY, top, left, direction}
+};
+
+const Robot = connect(mapStateToProps, null)(({game, cordX, cordY, top, left, direction}) => {
 
   const [{ isDragging }, drag] = useDrag({
     type: "ROBOT",
@@ -23,10 +54,10 @@ const Robot = connect(mapStateToProps, null)(({game, cordX, cordY}) => {
   return (
     <div 
       ref={drag} 
-      className="robot robot-n" 
+      className={`robot robot-${direction}`} 
       style={{
-        top: (BOARD_OFFSET_Y + BOARD_CELL_HEIGHT*cordY)+"px",
-        left: (BOARD_OFFSET_X + BOARD_CELL_WIDTH*cordX)+"px",
+        top: `${top}px`,
+        left: `${left}px`,
         zIndex: 10 + cordY*3 + 2
       }}>
     </div>

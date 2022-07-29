@@ -6,85 +6,105 @@ import Square from './Square.js';
 import Robot from './Robot.js';
 import { connect } from 'react-redux';
 import { useReducer, useEffect, useRef} from 'react';
-import { useDrag } from 'react-dnd';
-import executeRoboProgram from '../RoboProgram';
+import { useTranslation } from 'react-i18next';
+import executeRoboProgram from '../RoboProgram.js';
+import { BOARD_WIDTH, BOARD_HEIGHT, TURNS_LIMIT, MOVE_TICKS, TICK_TIME, STEERING_ACTIONS, PAINT_ACTIONS } from '../gameConfig.js'
 
-const BOARD_WIDTH = 10;
-const BOARD_HEIGHT = 14;
-const TURNS_LIMIT = 100; //maximum turns in log
-const TURN_SPEED = 1000; //ms in turn
-const TURN_DELAY = 500; //ms between turns
-const TURN_TICKS = 20; //ticks in turn (smoothness)
-const TURN_DELAY_TICKS = TURN_DELAY*TURN_TICKS/TURN_SPEED; //ticks between turns
-const TICK_TIME = TURN_SPEED/TURN_TICKS; //ms in tick
+
+function planBehavour(lastBehavour, newAction) {
+  let result;
+  if (newAction === "paint") {
+    result = [...PAINT_ACTIONS[lastBehavour]];
+  } else {
+    result = [...STEERING_ACTIONS[lastBehavour][newAction[0]], ...Array(MOVE_TICKS).fill(newAction[0])];
+  }
+  return result;
+}
 
 function gameReducer(state, action) {
   switch (action.type) {
-    case "reset":
-      return gameInit({field: action.field, log: action.log});
+    case "stop":
+      return gameInit({field: action.field, workflow: action.workflow});
 
     case "tick":
-      let newTick = state.tick+1;
-      let newStep = state.step;
-      let newPlay = !((newStep >= state.log.length - 1)&&(newTick>=TURN_TICKS));
-      let newPaints = [...state.paints];
-      if (state.log[newStep].action === "paint") {
-        newPaints.push({x: state.log[newStep].x, y: state.log[newStep].y});
+      let play = "play";
+      if ((state.tick === state.behavour.length-1)&&(state.step === state.workflow.length-1)) {
+        play = "finish";
       }
-      if ((newTick >= TURN_TICKS+TURN_DELAY_TICKS) && newPlay) {
-        newTick = 0;
-        newStep = state.step+1;
-      }  
-      let newBehavour = state.log[newStep].action;
-      let newError = state.log[newStep].error;
-      if (state.tick >= TURN_TICKS) {
-        newBehavour = (newError)?(state.behavour):"sleep";
-      } 
+
+      let tick = state.tick;
+      if ((state.tick !== state.behavour.length-1)&&(play === "play")) {
+        tick = state.tick+1;
+      }
+
+      let paints = [...state.paints];
+      if ((state.tick === state.behavour.length-1)&&(state.workflow[state.step].action === "paint")) {
+        paints.push({x: state.workflow[state.step].start.x, y: state.workflow[state.step].start.y});
+      }
+
+      let step = state.step;
+      if ((state.tick === state.behavour.length-1) && (play === "play")) {
+        step = state.step+1;
+        tick = 0;
+      }
+
+      let error = state.workflow[step].error;
+
+      let behavour = state.behavour;
+      if ((tick === 0) && !error) {
+        behavour = planBehavour(state.behavour.at(-1), state.workflow[step].action);
+      }
+
+      
+
       return {
-        paints: newPaints, 
-        log: [...state.log], 
-        step: newStep, 
-        tick: newTick,
-        behavour: newBehavour,
-        play: newPlay,
-        error: newError
+        ...state,
+        paints: paints, 
+        step: step, 
+        tick: tick,
+        behavour: behavour,
+        play: play,
+        error: error
       }
 
-    case "play":
-      return {...state, play: true}
-
-    case "replay":
-      return {...gameInit({field: action.field, log: action.log}), play: true}
+    case "play": {
+      if (state.play === "pause") {
+        return {...state, play: "play"}
+      } else {
+        return {...gameInit({field: action.field, workflow: action.workflow}), play: "play"}
+      }
+    }
 
     case "pause":
-      return {...state, play: false}
+      return {...state, play: "pause"}
   }
 }
 
-function gameInit({field, log}) {
+function gameInit({field, workflow}) {
   return {
     paints: [...field.paints], 
-    log: [...log], 
+    workflow: [...workflow], 
     step: 0,
     tick: -1,
-    behavour: "sleep", 
-    play: false,
+    behavour: ["s"], 
+    play: "stop",
     error: false
   }
 }
 
 const mapStateToProps = (state) => ({
   field: state.field,
-  log: executeRoboProgram(state.program.procedures, state.field, TURNS_LIMIT),
+  workflow: executeRoboProgram(state.program.procedures, state.field, TURNS_LIMIT),
 });
 
-const Board = connect(mapStateToProps, null)(({field, log}) => {
+const Board = connect(mapStateToProps, null)(({field, workflow}) => {
+  const { t, i18n } = useTranslation();
 
-  const [game, dispatchGame] = useReducer(gameReducer, {field, log}, gameInit);
+  const [game, dispatchGame] = useReducer(gameReducer, {field, workflow}, gameInit);
   const tickerRef = useRef(0);
 
   useEffect(() => {
-    if (game.play) {
+    if (game.play === "play") {
       dispatchGame({type: 'tick'});
       tickerRef.current = setInterval(() => dispatchGame({type: 'tick'}), TICK_TIME);
       return () => {
@@ -92,7 +112,7 @@ const Board = connect(mapStateToProps, null)(({field, log}) => {
         tickerRef.current = 0;
       }
     }
-  }, [game.play, field, log]);
+  }, [game.play, field, game.workflow]);
 
   let boardParts = [];
   for (let j=0; j<=BOARD_HEIGHT; j++) {
@@ -110,10 +130,22 @@ const Board = connect(mapStateToProps, null)(({field, log}) => {
 
   return (<>
     <div className="control-pannel">
-      <span>Робот: Готов tick: {game.tick}, step: {game.step}</span>
-      <button className="stop" onClick={() => dispatchGame({type: "reset", field: field, log: log})}></button>
+      <span>
+        {`${t("status.robot")} `} 
+        {(game.play==="stop") && t("status.ready")}
+        {(game.play==="play") && t("status.atwork")}
+        {(game.play==="pause") && t("status.pause")}
+        {(game.play==="finish") && (game.error?t("status.broken"):t("status.finish"))}
+        {((game.play!=="stop") && (
+          (game.workflow[game.step].start.x < 0) ||
+          (game.workflow[game.step].start.x >= BOARD_WIDTH) ||
+          (game.workflow[game.step].start.y < 0) ||
+          (game.workflow[game.step].start.y >= BOARD_HEIGHT)
+          )) && ` ${t("status.outside")}`}
+      </span>
+      <button className="stop" onClick={() => dispatchGame({type: "stop", field: field, workflow: workflow})}></button>
       <button className="pause" onClick={() => dispatchGame({type: "pause"})}></button>
-      <button className="play" onClick={() => dispatchGame({type: "play"})}></button>
+      <button className="play" onClick={() => dispatchGame({type: "play", field: field, workflow: workflow})}></button>
     </div>
     <div className="board">
       <div className="board-inside">

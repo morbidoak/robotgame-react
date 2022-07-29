@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import rootReducer from './RoboProgramStore/reducers/rootReducer';
 import initialState from './RoboProgramStore/initialState';
+import './i18n.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const store = createStore(rootReducer, initialState);

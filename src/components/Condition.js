@@ -1,6 +1,7 @@
 import { useDrag, useDrop } from 'react-dnd';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { moveCondition, releaseCondition, dropCondition } from '../RoboProgramStore/actions';
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -10,6 +11,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 const Condition = connect(null, mapDispatchToProps)(({code, dragStart, dragAbort, dropCond}) => {
+  const { t, i18n } = useTranslation();
+
   const [{ isDragging }, drag] = useDrag({
     type: 'MOVE CONDITION',
     end: () => dragAbort(),
@@ -35,13 +38,13 @@ const Condition = connect(null, mapDispatchToProps)(({code, dragStart, dragAbort
   return (
     <>
       {((code.left === null) && (code.right === null))?(
-        <div key={code.id} ref={(("drop" in code) && code.drop)?drop:drag} className="simple-condition">
-          {code.val}
+        <div key={code.id} ref={(("drop" in code) && code.drop)?drop:drag} className={(code.val==="empty")?"empty-condition":"simple-condition"}>
+          {t(`instrument.CONDITION.${code.val}`)}
         </div>
       ):(
         <div key={code.id} className="complex-condition">
           {(code.left !== null)&&(<Condition code={code.left} />)}
-          <span ref={(("drop" in code) && code.drop)?drop:drag}>{code.val}</span>
+          <span ref={(("drop" in code) && code.drop)?drop:drag}>{t(`instrument.CONDITION.${code.val}-p`)}</span>
           {(code.right !== null)&&(<Condition code={code.right} />)}
         </div>
       )}

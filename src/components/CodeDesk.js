@@ -1,5 +1,6 @@
 import '../styles/CodeDesk.css'
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Procedure from'./Procedure.js';
 import CodeInstrument from'./CodeInstrument.js';
 import Dustbin from'./Dustbin.js';
@@ -10,10 +11,11 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  create: () => dispatch(newProcedure("New procedure")),
+  create: (dflt) => dispatch(newProcedure("asd")),
 });
 
 const CodeDesk = connect(mapStateToProps, mapDispatchToProps)(({procedures, create}) => {
+  const { t, i18n } = useTranslation();
   return (
     <>
       <div className="instruments">
@@ -41,7 +43,7 @@ const CodeDesk = connect(mapStateToProps, mapDispatchToProps)(({procedures, crea
       </div>
       <div className="program">
         {procedures.map((procedure) => <Procedure procedure={procedure} key={procedure.id} />)}
-        <button className="procedure-add" onClick={() => { create() }}>Новая процедура</button>
+        <button className="procedure-add" onClick={() => { create(t("instrument.new-procedure")) }}>{t("instrument.new-procedure")}</button>
       </div>
     </>
   );

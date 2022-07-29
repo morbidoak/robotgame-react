@@ -1,6 +1,7 @@
 import { useDrag } from 'react-dnd';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { newCommand, newCondition, releaseCommand, releaseCondition } from '../RoboProgramStore/actions';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -34,6 +35,8 @@ const cName = (type, value) => {
 }
 
 const CodeInstrument = connect(null, mapDispatchToProps)(({type, value, dragStart, dragAbort}) => {
+  const { t, i18n } = useTranslation();
+
   const [{ isDragging }, drag] = useDrag({
     type: `NEW ${type}`,
     end: () => dragAbort(),
@@ -50,7 +53,7 @@ const CodeInstrument = connect(null, mapDispatchToProps)(({type, value, dragStar
 
 
 
-  return (<div ref={drag} className={cName(type, value)}>{value}</div>);
+  return (<div ref={drag} className={cName(type, value)}>{t(`instrument.${type}.${value}`)}</div>);
 });
 
 export default CodeInstrument;

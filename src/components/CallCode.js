@@ -1,6 +1,7 @@
 import { useDrag } from 'react-dnd';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { moveCommand, releaseCommand, setProcedureCall } from '../RoboProgramStore/actions';
 
 const mapStateToProps = (state) => ({
@@ -14,6 +15,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 const CallCode = connect(mapStateToProps, mapDispatchToProps)(({code, proceduresList, dragStart, dragAbort, setCall}) => {
+  const { t, i18n } = useTranslation();
+
   const [{ isDragging }, drag] = useDrag({
     type: 'MOVE COMMAND',
     end: () => dragAbort(),
@@ -31,10 +34,10 @@ const CallCode = connect(mapStateToProps, mapDispatchToProps)(({code, procedures
   return (
     <div ref={drag} className="simple-command">
       <select value={code.src} onChange={(event => setCall(event.target.value))} >
-        <option key="0" value="">Nothing</option>
+        <option key="0" value="">{t("instrument.empty-procedure")}</option>
         {proceduresList.map((procedure) => (<option key={procedure.id} value={procedure.id}>{procedure.title}</option>))}
       </select>
-      <span>Call:</span>
+      <span>{t("instrument.COMMAND.call-p")}</span>
     </div>
   );
 });

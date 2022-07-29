@@ -61,9 +61,10 @@
   position: relative;
   float: left;
   width: 450px;
-  height: 600px;
+  height: auto;
   margin: 10px;
   background-color: transparent;
+  overflow: hidden;
 }
 
 .wall {
@@ -103,34 +104,32 @@
   height: 42px;
   margin: -5px;
   z-index: 5;
-  background-color: rgb(172, 114, 14);
-  border: 1px dotted rgb(243, 224, 185);
+  background-color: rgb(251, 242, 197);
+  border: 1px dotted rgb(204, 175, 118);
 }
 
 .painted {
-  background-color: rgb(235, 255, 55);
+  background-color: rgb(255, 255, 255);
 }
 
 .robot {
   position: absolute;
-  width: 60px;
-  height: 60px;
-  margin: -10px;
+  width: 50px;
+  height: 50px;
   background-color: transparent;
-  background-position: center;
+  background-image: url(../images/robot-sprites.png);
   background-repeat: no-repeat;
-  background-size: 60px 60px;
 }
 
-.robot-n { background-image: url(../images/robot-sprites/0.png); }
-.robot-nne { background-image: url(../images/robot-sprites/1.png); }
-.robot-nee { background-image: url(../images/robot-sprites/2.png); }
-.robot-e { background-image: url(../images/robot-sprites/3.png); }
-.robot-see { background-image: url(../images/robot-sprites/4.png); }
-.robot-sse { background-image: url(../images/robot-sprites/5.png); }
-.robot-s { background-image: url(../images/robot-sprites/6.png); }
-.robot-ssw { background-image: url(../images/robot-sprites/7.png); }
-.robot-sww { background-image: url(../images/robot-sprites/8.png); }
-.robot-w { background-image: url(../images/robot-sprites/9.png); }
-.robot-nww { background-image: url(../images/robot-sprites/10.png); }
-.robot-nnw { background-image: url(../images/robot-sprites/11.png); }
+.robot-n { background-position: 0px center; }
+.robot-nne {  background-position: -50px center; }
+.robot-nee {  background-position: -100px center; }
+.robot-e {  background-position: -150px center; }
+.robot-see {  background-position: -200px center; }
+.robot-sse {  background-position: -250px center; }
+.robot-s {  background-position: -300px center; }
+.robot-ssw {  background-position: -350px center; }
+.robot-sww {  background-position: -400px center; }
+.robot-w {  background-position: -450px center; }
+.robot-nww {  background-position: -500px center; }
+.robot-nnw { background-position: -550px center; }

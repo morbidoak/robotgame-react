@@ -1,6 +1,7 @@
 import { useDrag } from 'react-dnd';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { moveCommand, releaseCommand } from '../RoboProgramStore/actions';
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -9,6 +10,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 const Command = connect(null, mapDispatchToProps)(({code, dragStart, dragAbort}) => {
+  const { t, i18n } = useTranslation();
+
   const [{ isDragging }, drag] = useDrag({
     type: 'MOVE COMMAND',
     end: () => dragAbort(),
@@ -23,7 +26,7 @@ const Command = connect(null, mapDispatchToProps)(({code, dragStart, dragAbort})
     }
   }, [isDragging]);
 
-  return (<div ref={drag} className="simple-command">{code.to}</div>);
+  return (<div ref={drag} className="simple-command">{t(`instrument.COMMAND.${code.to}`)}</div>);
 });
 
 export default Command;
