@@ -81,6 +81,7 @@ function gameReducer(state, action) {
 }
 
 function gameInit({field, workflow}) {
+  console.log(workflow);
   return {
     paints: [...field.paints], 
     workflow: [...workflow], 

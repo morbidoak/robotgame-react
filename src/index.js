@@ -4,13 +4,14 @@ import './styles/index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './RoboProgramStore/reducers/rootReducer';
 import initialState from './RoboProgramStore/initialState';
 import './i18n.js';
+import { composeWithDevTools } from "redux-devtools-extension";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const store = createStore(rootReducer, initialState);
+const store = createStore(rootReducer, initialState, composeWithDevTools());
 root.render(
   <React.StrictMode>
     <Provider store={store}>

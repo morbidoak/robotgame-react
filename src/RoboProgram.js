@@ -35,9 +35,9 @@ function executeRoboProgram (procedures, field, stepLimit) {
 
       if (cond.val==="paint") {
           if (currentPaints.some(cords => ((cords.x===currentPosition.x) && (cords.y===currentPosition.y))))
-              return false;
-          else 
               return true;
+          else 
+              return false;
       }
 
     if (cond.val==="and") 
@@ -64,7 +64,7 @@ function executeRoboProgram (procedures, field, stepLimit) {
     newStep.start = {x:currentPosition.x, y:currentPosition.y};
     newStep.action = to;
     if (to === "paint") {
-        if (!condition({val:"paint"})) currentPaints.append({x:currentPosition.x, y:currentPosition.y});
+        if (!condition({val:"paint"})) currentPaints.push({x:currentPosition.x, y:currentPosition.y});
     } else {
         if (!condition({val: to})) error=true;
         else {
