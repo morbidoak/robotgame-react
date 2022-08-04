@@ -1,8 +1,7 @@
-import {addInserters, clearInserters, insertCommand, deleteCommand, mapCode, checkProcedureTitle, newProcedureTitle} from '../functions/mapProgram';
+import {addInserters, clearInserters, insertCommand, deleteCommand, mapCode, checkProcedureTitle, newProcedureTitle} from '../../functions/mapProgram.js';
 
 export default function program(state={}, action) {
   switch (action.type) {
-
     case "COMMAND_DRAG":
       return {
         procedures: addInserters(state.procedures, action.dragId),

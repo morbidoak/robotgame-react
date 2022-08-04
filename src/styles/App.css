@@ -101,3 +101,23 @@ h1 span {
   background: rgb(255, 255, 255) url(../images/load.png) no-repeat 7px;
   background-size: auto 25px;
 }
+
+.field-click-shield {
+  position: fixed;
+  top: 134px;
+  left: 50%;
+  width: 474px;
+  height: 649px;
+  margin: 0px 0px 0px -500px;
+  background-color: transparent;
+}
+
+.program-click-shield {
+  position: fixed;
+  top: 80px;
+  right: 50%;
+  margin: 0px -500px 0px 0px;
+  width: 519px;
+  height: 100%;
+  background-color: transparent;
+}

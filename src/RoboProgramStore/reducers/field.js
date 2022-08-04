@@ -1,4 +1,4 @@
-import { addElement, removeElement } from "../functions/editGameField";
+import { addElement, removeElement } from "../../functions/editBoard.js";
 
 export default function field(state={}, action) {
   switch (action.type) {

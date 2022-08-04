@@ -2,10 +2,10 @@
   position: fixed;
   top: 90px;
   left: 50%;
-  width: 438px;
+  width: 456px;
   height: 40px;
   margin: 0px 0px 0px -500px;
-  padding: 0px 17px 0px 15px;
+  padding: 0px 7px 0px 7px;
   border: 2px solid black;
   border-radius: 15px 15px 0px 0px;
   background-color: rgb(233, 233, 255);
@@ -13,7 +13,7 @@
 
 .control-pannel span {
   text-align: left;
-  font: 16px Akrobat;
+  font: 14px Akrobat;
   line-height: 40px;
 }
 
@@ -29,19 +29,29 @@
               inset rgba(0,0,0,0.2)      -2px -2px 4px 1px;
 }
 
-.control-pannel .play {
-  background: rgb(133, 248, 133) url(../images/play.png) center no-repeat;
-  background-size: auto 16px;
+.control-pannel .play-step {
+  background: rgb(133, 248, 242) url(../images/play-step.png) center no-repeat;
+  background-size: auto 22px;
+}
+
+.control-pannel .play-x1 {
+  background: rgb(133, 248, 133) url(../images/play-x1.png) center no-repeat;
+  background-size: auto 22px;
+}
+
+.control-pannel .play-x3 {
+  background: rgb(77, 226, 77) url(../images/play-x3.png) center no-repeat;
+  background-size: auto 22px;
 }
 
 .control-pannel .pause {
   background: rgb(253, 251, 127) url(../images/pause.png) center no-repeat;
-  background-size: auto 16px;
+  background-size: auto 22px;
 }
 
 .control-pannel .stop {
   background: rgb(255, 98, 98) url(../images/stop.png) center no-repeat;
-  background-size: auto 16px;
+  background-size: auto 22px;
 }
 
 .board {

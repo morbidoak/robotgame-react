@@ -1,26 +1,4 @@
-import { nanoid } from 'nanoid';
-
-function newCommandCode(cmd) {
-  if (cmd==="north" || cmd==="south" || cmd==="west" || cmd==="east" || cmd==="paint")
-    return {type: "move", to: cmd, id: nanoid() };
-
-  if (cmd==="loop" || cmd === "if")
-    return {type: cmd, cond: {val: "empty", id: nanoid(), left: null, right:null}, code: [], id: nanoid() };
-
-  if (cmd==="call")
-    return {type: "call", src: "", id: nanoid() };
-}
-
-function newConditionCode(cond) {
-  if (cond==="north" || cond==="south" || cond==="west" || cond==="east" || cond==="paint")
-    return {val: cond, id: nanoid(), left: null, right:null };
-
-  if (cond==="and" || cond === "or")
-    return {val: cond, id: nanoid(), left: {val: "empty", id: nanoid(), left: null, right:null}, right: {val: "empty", id: nanoid(), left: null, right:null} }
-
-  if (cond==="not")
-    return {val: "not", id: nanoid(), left: null, right: {val: "empty", id: nanoid(), left: null, right:null} }
-}
+import { newCommandCode, newConditionCode } from '../functions/generateNewElement.js'
 
 export const newCommand = (cmd) => (
   {
@@ -175,5 +153,49 @@ export const moveRobot = (x, y) => (
     type: "ROBOT_MOVE",
     newX: x,
     newY: y,
+  }
+);
+
+export const playStep = (field, procedures) => (
+  {
+    type: "PLAY_STEP",
+    field: field,
+    procedures: procedures,
+  }
+);
+
+export const playX1 = (field, procedures) => (
+  {
+    type: "PLAY_X1",
+    field: field,
+    procedures: procedures,
+  }
+);
+
+export const playX3 = (field, procedures) => (
+  {
+    type: "PLAY_X3",
+    field: field,
+    procedures: procedures,
+  }
+);
+
+export const stop = (field, procedures) => (
+  {
+    type: "STOP",
+    field: field,
+    procedures: procedures,
+  }
+);
+
+export const pause = () => (
+  {
+    type: "PAUSE",
+  }
+);
+
+export const tick = () => (
+  {
+    type: "TICK",
   }
 );

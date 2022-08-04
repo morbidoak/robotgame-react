@@ -59,9 +59,10 @@ function executeRoboProgram (procedures, field, stepLimit) {
       } else return;
   }
 
-  function move(to) {
+  function move(to, cmdId) {
     let newStep = {};
     newStep.start = {x:currentPosition.x, y:currentPosition.y};
+    newStep.id = cmdId;
     newStep.action = to;
     if (to === "paint") {
         if (!condition({val:"paint"})) currentPaints.push({x:currentPosition.x, y:currentPosition.y});
@@ -86,7 +87,7 @@ function executeRoboProgram (procedures, field, stepLimit) {
     for (let i=0; i<code.length; i++) {
         if (isError()) break;
 
-        if (code[i].type === "move") move(code[i].to);
+        if (code[i].type === "move") move(code[i].to, code[i].id);
         if (code[i].type === "if") if (condition(code[i].cond)) execute(code[i].code);
         if (code[i].type === "loop") loop(code[i].cond, code[i].code);
         if (code[i].type === "call") {

@@ -1,10 +1,10 @@
 import { useDrop } from 'react-dnd';
 import { connect } from 'react-redux';
-import { moveRobot, addPaint, removePaint } from "../RoboProgramStore/actions";
+import { moveRobot, addPaint, removePaint } from "../RoboProgramStore/actions.js";
 
 const mapStateToProps = (state, ownProps) => ({
-  isPaint: (ownProps.game.tick > -1)?
-    (ownProps.game.paints.some(cords => ((cords.x===ownProps.x) && (cords.y===ownProps.y)))):
+  isPaint: (state.game.play !== "stop")?
+    (state.game.paints.some(cords => ((cords.x===ownProps.x) && (cords.y===ownProps.y)))):
     (state.field.paints.some(cords => ((cords.x===ownProps.x) && (cords.y===ownProps.y)))),
 });
 
@@ -14,7 +14,7 @@ const mapDispatchToProps = (dispatch) => ({
   dropRobot: (x, y) => dispatch(moveRobot(x, y)),
 });
 
-const Square = connect(mapStateToProps, mapDispatchToProps)(({x, y, game, isPaint, addPaint, deletePaint, dropRobot}) => {
+const Square = connect(mapStateToProps, mapDispatchToProps)(({x, y, isPaint, addPaint, deletePaint, dropRobot}) => {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "ROBOT",
@@ -25,9 +25,7 @@ const Square = connect(mapStateToProps, mapDispatchToProps)(({x, y, game, isPain
   }), [x, y]);
 
   return (
-    <div ref={drop} className={"square"+(isPaint?" painted":"")} onClick={()=>(isPaint?deletePaint(x, y):addPaint(x, y))}>
-
-    </div>
+    <div ref={drop} className={"square"+(isPaint?" painted":"")} onClick={()=>(isPaint?deletePaint(x, y):addPaint(x, y))}></div>
   )
 });
 
