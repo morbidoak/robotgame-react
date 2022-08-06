@@ -3,11 +3,21 @@ import { planBehavour } from "../../functions/planBehavour.js";
 
 export default function game(state = {}, action) {
   switch (action.type) {
+    case "RESET_STATE":
+      return initGame();
+
+    case "SET_STATE":
+      return action.newState.game;
+
     case "STOP":
       return initGame(action.field, action.procedures);
 
     case "PAUSE":
-      return {...state, play: "pause"};
+      if (state.play !== "finish") {
+        return {...state, play: "pause"};
+      } else {
+        return state;
+      }
     
     case "PLAY_STEP":
       if (state.play === "stop") {

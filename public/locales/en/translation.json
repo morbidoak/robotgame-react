@@ -40,9 +40,21 @@
     "empty-procedure": "-"
   },
   "alerts": {
+    "ops": "Ops!",
+    "delete": "Delete",
+    "rename": "Rename",
+    "new": "New program",
+    "new-confirm": "Close your current program? It will be lost if has not been saved.",
+    "save": "Save program",
+    "save-empty": "Program name should not be empty",
+    "save-confirm": "Are you sure you want to overwrite program {{programName}}",
+    "save-success": "Program {{programName}} saved",
+    "load": "Load program",
     "delete-procedure": "Really delete procedure?",
     "rename-procedure": "New title:",
-    "not-released": "Sorry, this section still under construction."
+    "not-released": "Sorry, this section still under construction.",
+    "ok": "Ok",
+    "cancel": "Cancel"
   },
   "status": {
     "robot": "Robot",

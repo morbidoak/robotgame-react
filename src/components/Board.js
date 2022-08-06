@@ -71,11 +71,23 @@ const Board = connect(mapStateToProps, mapDispatchToProps)(({field, procedures, 
           (game.workflow[game.step].start.y >= BOARD_HEIGHT)
           )) && ` ${t("status.outside")}`}
       </span>
-      <button className="stop" onClick={() => stop(field, procedures)}></button>
-      <button className="pause" onClick={() => pause()}></button>
-      <button className="play-step" onClick={() => playStep(field, procedures)}></button>
-      <button className="play-x1" onClick={() => playX1(field, procedures)}></button>
-      <button className="play-x3" onClick={() => playX3(field, procedures)}></button>
+      <button 
+        className={(()=>{
+          switch (game.play) {
+            case "stop":
+              return "stop disable";
+            case "finish":
+              return "stop refresh";
+            default:
+              return "stop";
+          }
+        })()} 
+        onClick={() => stop(field, procedures)}
+      ></button>
+      <button className={`pause${(game.play==="finish")?" disable":""}`} onClick={() => pause()}></button>
+      <button className={`play-step${(game.play==="finish")?" disable":""}`} onClick={() => playStep(field, procedures)}></button>
+      <button className={`play-x1${(game.play==="finish")?" disable":""}`} onClick={() => playX1(field, procedures)}></button>
+      <button className={`play-x3${(game.play==="finish")?" disable":""}`} onClick={() => playX3(field, procedures)}></button>
     </div>
     <div className="board">
       <div className="board-inside">

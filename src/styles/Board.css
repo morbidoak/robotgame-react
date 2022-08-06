@@ -27,31 +27,44 @@
   border-radius: 5px;
   box-shadow: inset rgba(255,255,255,0.2) 2px  2px 4px 1px,
               inset rgba(0,0,0,0.2)      -2px -2px 4px 1px;
+  background-size: auto 22px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .control-pannel .play-step {
-  background: rgb(133, 248, 242) url(../images/play-step.png) center no-repeat;
-  background-size: auto 22px;
+  background-color: rgb(133, 248, 242); 
+  background-image: url(../images/play-step.png);
+  
 }
 
 .control-pannel .play-x1 {
-  background: rgb(133, 248, 133) url(../images/play-x1.png) center no-repeat;
-  background-size: auto 22px;
+  background-color: rgb(133, 248, 133); 
+  background-image: url(../images/play-x1.png);
 }
 
 .control-pannel .play-x3 {
-  background: rgb(77, 226, 77) url(../images/play-x3.png) center no-repeat;
-  background-size: auto 22px;
+  background-color: rgb(77, 226, 77);
+  background-image: url(../images/play-x3.png);
+
 }
 
 .control-pannel .pause {
-  background: rgb(253, 251, 127) url(../images/pause.png) center no-repeat;
-  background-size: auto 22px;
+  background-color: rgb(253, 251, 127); 
+  background-image: url(../images/pause.png);
 }
 
 .control-pannel .stop {
-  background: rgb(255, 98, 98) url(../images/stop.png) center no-repeat;
-  background-size: auto 22px;
+  background-color: rgb(255, 126, 126); 
+  background-image: url(../images/stop.png);
+}
+
+.control-pannel .disable {
+  background-color: rgb(214, 211, 211);
+}
+
+.control-pannel .refresh {
+  background-image: url(../images/refresh.png);
 }
 
 .board {

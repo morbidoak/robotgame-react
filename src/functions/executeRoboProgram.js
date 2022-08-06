@@ -108,7 +108,7 @@ function executeRoboProgram (procedures, field, stepLimit) {
   let error = false;
   let step = 0;
   let workflow = [];
-  
+
   execute(procedures[0].code);
 
   return workflow;

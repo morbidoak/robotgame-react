@@ -5,7 +5,7 @@ import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './RoboProgramStore/reducers/rootReducer';
+import rootReducer from './RoboProgramStore/reducers/rootReducer.js';
 import initialState from './RoboProgramStore/initialState.js';
 import './i18n.js';
 import { composeWithDevTools } from "redux-devtools-extension";

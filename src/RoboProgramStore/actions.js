@@ -199,3 +199,62 @@ export const tick = () => (
     type: "TICK",
   }
 );
+
+export const alertWindow = (label, message) => (
+  {
+    type: "ALERT_WINDOW",
+    label: label,
+    message: message,
+  }
+);
+
+export const confirmWindow = (label, message, onOk, onCancel=(()=>{})) => (
+  {
+    type: "CONFIRM_WINDOW",
+    label: label,
+    message: message,
+    onOk: onOk,
+    onCancel: onCancel,
+  }
+);
+
+export const promptWindow = (label, message, defaultValue, onOk, onCancel=(()=>{})) => (
+  {
+    type: "PROMPT_WINDOW",
+    label: label,
+    message: message,
+    onOk: onOk,
+    onCancel: onCancel,
+    defaultValue: defaultValue,
+  }
+);
+
+export const selectWindow = (label, message, collection, onOk, onCancel=(()=>{})) => (
+  {
+    type: "SELECT_WINDOW",
+    label: label,
+    message: message,
+    onOk: onOk,
+    onCancel: onCancel,
+    collection: collection,
+  }
+);
+
+export const closeWindow = () => (
+  {
+    type: "CLOSE_WINDOW",
+  }
+);
+
+export const resetState = () => (
+  {
+    type: "RESET_STATE",
+  }
+);
+
+export const setState = (newState) => (
+  {
+    type: "SET_STATE",
+    newState: newState,
+  }
+);

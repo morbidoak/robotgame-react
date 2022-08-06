@@ -1,5 +1,3 @@
-import i18n from './i18n.js';
-
 export const BOARD_WIDTH = 10;
 export const BOARD_HEIGHT = 14;
 export const TURNS_LIMIT = 100; //maximum turns in log
@@ -39,22 +37,4 @@ export const PAINT_ACTIONS = {
 
 
 export const AUTOSAVE_STORAGE_NAME = "autosave";
-export const SAVE_STORAGE_NAME_PREFIX = "save_slot_";
-
-export const DEFAULT_PROCEDURES = [
-  {
-    title: i18n.t("new program"),
-    id: '0',
-    code: [],
-  }
-];
-
-export const DEFAULT_FIELD = {
-  robot: {
-    x: 1,
-    y: 1
-  },
-  hWalls: [],
-  vWalls: [],
-  paints: [],
-};
+export const STORAGE_PREFIX = "__"

@@ -1,7 +1,46 @@
-import { DEFAULT_PROCEDURES, DEFAULT_FIELD, TURNS_LIMIT } from '../config.js';
+import i18n from '../i18n.js';
+import { TURNS_LIMIT } from '../config.js';
 import executeRoboProgram from './executeRoboProgram.js';
 
-export function initGame(field, procedures) {
+
+export function initProcedures() {
+  return [{
+    title: i18n.t("new program"),
+    id: '0',
+    code: [],
+  }];
+}
+
+export function initModals() {
+  return {
+    windowType: null,
+    params: {},
+    queue: [],
+  }
+}
+
+export function initProgram() {
+  return {
+    procedures: initProcedures(),
+    dragCode: "",
+    dragId: "",
+    editing: false,
+  }
+}
+
+export function initField() {
+  return {
+    robot: {
+      x: 1,
+      y: 1
+    },
+    hWalls: [],
+    vWalls: [],
+    paints: [],
+  };
+}
+
+export function initGame(field=initField(), procedures=initProcedures()) {
   return {
     paints: [...field.paints], 
     workflow: executeRoboProgram(procedures, field, TURNS_LIMIT), 
@@ -15,13 +54,9 @@ export function initGame(field, procedures) {
 
 export function initRoboProgram() {
   return {
-      program: {
-        procedures: DEFAULT_PROCEDURES,
-        dragCode: "",
-        dragId: "",
-        editing: false,
-      },
-      field: DEFAULT_FIELD,
-      game: initGame(DEFAULT_FIELD, DEFAULT_PROCEDURES),
+      program: initProgram(),
+      field: initField(),
+      game: initGame(),
+      modals: initModals(),
   }
 }

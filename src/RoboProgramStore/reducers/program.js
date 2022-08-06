@@ -1,7 +1,14 @@
+import { initProgram } from '../../functions/initRoboProgram.js';
 import {addInserters, clearInserters, insertCommand, deleteCommand, mapCode, checkProcedureTitle, newProcedureTitle} from '../../functions/mapProgram.js';
 
 export default function program(state={}, action) {
   switch (action.type) {
+    case "RESET_STATE":
+      return initProgram();
+
+    case "SET_STATE":
+      return action.newState.program;
+
     case "COMMAND_DRAG":
       return {
         procedures: addInserters(state.procedures, action.dragId),

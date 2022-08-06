@@ -1,7 +1,14 @@
 import { addElement, removeElement } from "../../functions/editBoard.js";
+import { initField } from "../../functions/initRoboProgram.js";
 
 export default function field(state={}, action) {
   switch (action.type) {
+    case "RESET_STATE":
+      return initField();
+
+    case "SET_STATE":
+      return action.newState.field;
+
     case "HORIZONTAL_WALL_ADD": 
       return {
         ...state,
