@@ -14,7 +14,7 @@ Last version is available on http://robotgame.oakela.org
 <a name="rules"></a>
 
 ## Robot game rules
-*Obvious things should be said more often for that they remain so*
+*Obvious things should be said more often for that they remain so.*
 
 ### Program
 Program consists from one or several procedures.
@@ -61,7 +61,7 @@ cd robotgame-react
 ```
 install dependencies:
 ```bash
-cd npm install
+npm install
 ```
 and run:
 ```bash

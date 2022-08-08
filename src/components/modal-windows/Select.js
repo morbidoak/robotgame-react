@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-modal';
@@ -39,10 +39,10 @@ const Select = connect(mapStateToProps, mapDispatchToProps)(({isOpen, message, l
             <div
              className="collection">
               {collection.map((item, index) =>  
-                <>
-                  <input type="radio" id={`selectItem${index}`} name="selectItem" key={`radio-${item}`} value={item} checked={val === item} onChange={(event)=>setVal(event.target.value)} />
-                  <label key={`label-${item}`} htmlFor={`selectItem${index}`}>{item}</label>
-                </>
+                <Fragment key={`radio-${item}`}>
+                  <input type="radio" id={`selectItem${index}`} name="selectItem" value={item} checked={val === item} onChange={(event)=>setVal(event.target.value)} />
+                  <label htmlFor={`selectItem${index}`}>{item}</label>
+                </Fragment>
               )}
             </div>
           )}

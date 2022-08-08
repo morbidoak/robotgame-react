@@ -87,10 +87,10 @@ const App = connect(mapStateToProps, mapDispatchToProps)(({state, alert, confirm
           <div className="program-click-shield"></div>
           </>
         )}
-        <Alert />
-        <Confirm />
-        <Prompt />
-        <Select />
+        {(state.modals.windowType === "alert") && <Alert />}
+        {(state.modals.windowType === "confirm") && <Confirm />}
+        {(state.modals.windowType === "prompt") && <Prompt />}
+        {(state.modals.windowType === "select") && <Select />}
       </DndProvider>
     </div>
   );

@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch, ) => ({
 const Prompt = connect(mapStateToProps, mapDispatchToProps)(({isOpen, message, label, onOk, onCancel, defaultValue, closeWindow}) => {
   const { t, i18n } = useTranslation();
   const [val, setVal] = useState(defaultValue);
-
+  
   return (
     <Modal 
         isOpen={isOpen}
@@ -36,7 +36,7 @@ const Prompt = connect(mapStateToProps, mapDispatchToProps)(({isOpen, message, l
         </div>
         <div className="body">
           <p>{message}</p>
-          <input type="text" value={val} onChange={(event)=>setVal(event.target.value)} defaultValue={defaultValue} />
+          <input type="text" value={val} onChange={(event)=>setVal(event.target.value)} />
           <div className="buttons">
             <button onClick={() => {onOk(val); closeWindow()}}>{t("alerts.ok")}</button>
             <button onClick={() => {onCancel(val); closeWindow()}}>{t("alerts.cancel")}</button>
