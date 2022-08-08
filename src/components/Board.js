@@ -56,20 +56,28 @@ const Board = connect(mapStateToProps, mapDispatchToProps)(({field, procedures, 
     }
   }
 
-  return (<>
-    <div className="control-pannel">
-      <span>
-        {`${t("status.robot")} `} 
+  const status = () => {
+    return (
+      <>
+        {`${t("status.robot")} `}
         {(game.play==="stop") && t("status.ready")}
         {(game.play === "play-step" || game.play === "play-x1" || game.play === "play-x3") && t("status.atwork")}
         {(game.play==="pause") && t("status.pause")}
         {(game.play==="finish") && (game.error?t("status.broken"):t("status.finish"))}
-        {((game.play!=="stop") && (
+        {((game.play!=="stop") && (game.workflow.length > 0) && (
           (game.workflow[game.step].start.x < 0) ||
           (game.workflow[game.step].start.x >= BOARD_WIDTH) ||
           (game.workflow[game.step].start.y < 0) ||
           (game.workflow[game.step].start.y >= BOARD_HEIGHT)
           )) && ` ${t("status.outside")}`}
+      </>
+    );
+  }
+
+  return (<>
+    <div className="control-pannel">
+      <span>
+        {status()}
       </span>
       <button 
         className={(()=>{

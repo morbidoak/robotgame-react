@@ -1,5 +1,6 @@
 import { initProgram } from '../../functions/initRoboProgram.js';
-import {addInserters, clearInserters, insertCommand, deleteCommand, mapCode, checkProcedureTitle, newProcedureTitle} from '../../functions/mapProgram.js';
+import {checkProcedureTitle, newProcedureTitle} from '../../functions/procedureTitle.js';
+import mapProgram from '../../functions/mapProgram.js';
 
 export default function program(state={}, action) {
   switch (action.type) {
@@ -11,32 +12,23 @@ export default function program(state={}, action) {
 
     case "COMMAND_DRAG":
       return {
-        procedures: addInserters(state.procedures, action.dragId),
+        procedures: mapProgram(state.procedures, "ADD_INSERTERS", {avoidId: action.dragCode.id}),
         dragCode: action.dragCode,
         dragId: action.dragId,
         editing: true,
       }
 
     case "COMMAND_DROP":
-      if (state.dragId === "") {
-        return {
-          procedures: insertCommand(state.procedures, action.dropId, state.dragCode),
-          dragCode: "",
-          dragId: "",
-          editing: false,
-        }
-      } else {
-        return {
-          procedures: insertCommand(deleteCommand(state.procedures, state.dragId), action.dropId, state.dragCode),
-          dragCode: "",
-          dragId: "",
-          editing: false,
-        }
+      return {
+        procedures: mapProgram(mapProgram(state.procedures, "DELETE_COMMAND", {deleteId: state.dragCode.id}), "INSERT_COMMAND", {insertId: action.dropId, command: state.dragCode}),
+        dragCode: "",
+        dragId: "",
+        editing: false,
       }
 
     case "COMMAND_TRASH":
       return {
-        procedures: clearInserters(deleteCommand(state.procedures, state.dragId)),
+        procedures: mapProgram(mapProgram(state.procedures, "DELETE_COMMAND", {deleteId: state.dragCode.id}), "DELETE_INSERTERS"), 
         dragCode: "",
         dragId: "",
         editing: false,
@@ -44,7 +36,7 @@ export default function program(state={}, action) {
 
     case "COMMAND_RELEASE":
       return {
-        procedures: clearInserters(state.procedures),
+        procedures: mapProgram(state.procedures, "DELETE_INSERTERS"),
         dragCode: "",
         dragId: "",
         editing: false,
@@ -52,7 +44,7 @@ export default function program(state={}, action) {
 
     case "CONDITION_DRAG":
       return {
-        procedures: mapCode(state.procedures, "MARK_DROP_CONDITION", {avoidId: action.dragCode.id, parentDrop: true}),
+        procedures: mapProgram(state.procedures, "MARK_DROP_CONDITION", {avoidId: action.dragCode.id, parentDrop: true}),
         dragCode: action.dragCode,
         dragId: action.dragCode.id,
         editing: true,
@@ -60,7 +52,7 @@ export default function program(state={}, action) {
 
     case "CONDITION_DROP": {
         return {
-          procedures: mapCode(mapCode(state.procedures, "DELETE_CONDITION", {dropId: state.dragId}), "INSERT_CONDITION", {condition: state.dragCode, dropId: action.dropId}),
+          procedures: mapProgram(mapProgram(state.procedures, "DELETE_CONDITION", {dropId: state.dragId}), "INSERT_CONDITION", {condition: state.dragCode, dropId: action.dropId}),
           dragCode: "",
           dragId: "",
           editing: false,
@@ -69,7 +61,7 @@ export default function program(state={}, action) {
 
     case "CONDITION_TRASH":
       return {
-        procedures: mapCode(state.procedures, "DELETE_CONDITION", {dropId: state.dragId}),
+        procedures: mapProgram(state.procedures, "DELETE_CONDITION", {dropId: state.dragId}),
         dragCode: "",
         dragId: "",
         editing: false,
@@ -77,7 +69,7 @@ export default function program(state={}, action) {
   
     case "CONDITION_RELEASE":
       return {
-        procedures: mapCode(state.procedures),
+        procedures: mapProgram(state.procedures),
         dragCode: "",
         dragId: "",
         editing: false,
@@ -86,7 +78,7 @@ export default function program(state={}, action) {
     case "PROCEDURE_ADD": {
       return {
         ...state,
-        procedures: mapCode(state.procedures, "ADD_PROCEDURE", {newTitle: newProcedureTitle(state.procedures, action.baseTitle = "")}),
+        procedures: mapProgram(state.procedures, "ADD_PROCEDURE", {newTitle: newProcedureTitle(state.procedures, action.baseTitle = "")}),
       }
     }
 
@@ -94,7 +86,7 @@ export default function program(state={}, action) {
       if (checkProcedureTitle(state.procedures, action.newTitle)) {
         return {
           ...state,
-          procedures: mapCode(state.procedures, "RENAME_PROCEDURE", {renameId: action.renameId, newTitle: action.newTitle}),
+          procedures: mapProgram(state.procedures, "RENAME_PROCEDURE", {renameId: action.renameId, newTitle: action.newTitle}),
         }
       } else {
         return state;
@@ -103,13 +95,13 @@ export default function program(state={}, action) {
     case "PROCEDURE_SET":
       return {
         ...state,
-        procedures: mapCode(state.procedures, "PROCEDURE_SET", {callId: action.callId, procedureId: action.procedureId}),
+        procedures: mapProgram(state.procedures, "PROCEDURE_SET", {callId: action.callId, procedureId: action.procedureId}),
       }
 
     case "PROCEDURE_DELETE":
       return {
         ...state,
-        procedures: mapCode(state.procedures, "DELETE_PROCEDURE", {deleteId: action.deleteId}),
+        procedures: mapProgram(state.procedures, "DELETE_PROCEDURE", {deleteId: action.deleteId}),
       }
 
     default:

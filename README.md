@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+## Contents
+ - [About project](#about)
+ - [Robot Game rules](#rules)
+ - [Download & Run localдy](#run)
+ - [ToDo list](#todo)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<a name="about"></a>
 
-## Available Scripts
+## About project
+This is educational website-game for kids (and adults too, why not), based on 1st part of [A.Shen and D.Shkolnik programming course](https://www.mccme.ru/shen/progbook/part1.pdf). It is designed to teach programming basics: opertors, conditions, cycles and their invariants, subprograms with recursion.
 
-In the project directory, you can run:
+Last version is available on http://robotgame.oakela.org
 
-### `npm start`
+<a name="rules"></a>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Robot game rules
+*Obvious things should be said more often for that they remain so*
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Program
+Program consists from one or several procedures.
 
-### `npm test`
+Procedure is a sequence of commands:
+ - ***step north/south/east/west*** - Robot makes a step to neighbour cell in target direction. If a wall blocks his way - robot breaks down and program stops.
+ - ***paint*** - Robot paints cell under him.
+ - ***if*** - Consists of condition and sequence of commands, witch will be executed if condition is true.
+ - ***while*** - Like ***if***, but sequence will be executed while condition is true.
+ - ***call*** - Runs another procedure. It is possible to run procedure from itself to make a recursion.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Conditions in ***if*** and ***while*** are one of:
+ - ***north/south/east/west free*** - True if target direction is open.
+ - ***painted*** - True if cell under the robot is painted.
+ - ***not {condition}*** - True if ***{condition}*** is false.
+ - ***{condition} and {condition}*** - True if both of conditions are true.
+ - ***{condition} or {condition}*** - True if at least one of conditions is true.
 
-### `npm run build`
+You can drag&drop commands and condition from instruments panel (on the right) to procedures. To remove some use big red dustbin.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Game field
+Drag&drop robot to change his start position.
+Click on cell to add or remove paint.
+Click between cells to add or remove walls.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+You can run your robot program on normal speed, tripple speed or step-by-step. Field and program can be editted only when robot is stopped.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<a name="run"></a>
 
-### `npm run eject`
+## Download & Run locally
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Install npm, if you haven't. For example:
+```bash
+curl https://npmjs.org/install.sh | sh
+```
+clone this repository:
+```bash
+cd /path/to/projects
+git clone https://github.com/morbidoak/robotgame-react
+```
+go to it:
+```bash
+cd robotgame-react
+```
+install dependencies:
+```bash
+cd npm install
+```
+and run:
+```bash
+npm run
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<a name="todo"></a>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## ToDo list
+- [X] Write Readme.md
+- [X] Publish project on hosting
+- [ ] Interactive tutorial
+- [ ] Prepare lessons (texts, tasks, examples)
+- [ ] Autotests for tasks
+- [ ] Optimize treatments of program tree (src/functions/mapProgram.js). Maybe switch to fully binary tree (if add an option (command) = (command)(command)) 
+- [ ] Find someone qualified to draw better design
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

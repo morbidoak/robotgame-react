@@ -13,7 +13,7 @@ export default function game(state = {}, action) {
       return initGame(action.field, action.procedures);
 
     case "PAUSE":
-      if (state.play !== "finish") {
+      if ((state.play !== "finish") && (state.play !== "stop")) {
         return {...state, play: "pause"};
       } else {
         return state;
@@ -41,6 +41,10 @@ export default function game(state = {}, action) {
       }
     
     case "TICK": {
+      if (state.workflow.length === 0) {
+        return {...state, play: "stop"}
+      }
+
       let play = state.play;
       if (state.tick === state.behavour.length-1) {
         if (state.step === state.workflow.length-1) {
@@ -68,7 +72,7 @@ export default function game(state = {}, action) {
         tick = 0;
       }
 
-      let error = state.workflow[step].error;
+      let error = state.workflow[step].error; 
 
       let behavour = state.behavour;
       if (tick === 0) {
